@@ -45,7 +45,7 @@ public class Offer {
 
 	@Override
 	public String toString() {
-		return "Offer " + name + " : " + format.format(time)+
+		return "Offer: " + name + " : " + format.format(time)+
 				" id: "+Integer.toString(id)+ "\n"
 				+ description ;
 	}
