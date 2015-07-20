@@ -177,7 +177,7 @@ public class DatabaseConnector {
 		ResultSet resultSet = statement.executeQuery(sql);
 		
 		while (resultSet.next()) {
-			try {
+			try {http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=90
 				visits.add(resultSet.getInt("OfferId"));
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
