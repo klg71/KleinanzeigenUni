@@ -1,5 +1,4 @@
 users.dat
 *.class
 /data.db-journal
-
-/bin
+bin/
