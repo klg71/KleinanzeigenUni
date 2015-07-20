@@ -102,4 +102,8 @@ public class User {
 		return telefon;
 	}
 	
+	public void addVisit(Integer offerId){
+		visitedOffers.add(offerId);
+	}
+	
 }
