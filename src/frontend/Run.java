@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 import persistence.DatabaseConnector;
@@ -68,8 +69,7 @@ public class Run {
 
 		}
 		if (user.isLoggedIn()) {
-			System.out.println("User login succesful");
-			System.out.println("Enter Command:");
+			System.out.println("\nEnter Command:");
 
 			String command = "";
 			while (!command.equals("exit")) {
@@ -86,13 +86,16 @@ public class Run {
 					listOffers();
 				}
 				if (command.equals("search")) {
-
+					searchOffers();
 				}
 				if (command.equals("show")) {
-
+					showOffer(user);
 				}
 				if (command.equals("add")) {
 					addOffer(user);
+				}
+				if (command.equals("last")) {
+					showLastOffers(user);
 				}
 				System.out.println("Enter Command:");
 			}
@@ -108,6 +111,7 @@ public class Run {
 				.println("search\t Searches in all offers and prints the result");
 		System.out.println("show\t Prints a specific offer");
 		System.out.println("add\t Adds a offer");
+		System.out.println("last\t Lists the Offers you visited last");
 		System.out.println("show\t Prints a specific offer");
 	}
 	
@@ -131,7 +135,30 @@ public class Run {
 		}
 	}
 	
+	public static void showLastOffers(User user){
+		for(Integer offer:user.getVisitedOffers()){
+			System.out.println(offerManager.getOfferById(offer)+"\n");
+		}
+	}
 	
+	public static void showOffer(User user){
+		System.out.println("Please enter OfferId:");
+		Integer OfferId = 0;
+		try {
+			String input = br.readLine();
+			OfferId=Integer.parseInt(input);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Offer offer=offerManager.getOfferById(OfferId);
+		if(offer==null){
+			System.out.println("This ID does not exist\n");
+		} else {
+			loginManager.visitOffer(user, offer);
+			System.out.println(offer);
+		}
+	}
 	
 	public static void addOffer(User user){
 		System.out.println("Offer Creation enter the offer name:");
