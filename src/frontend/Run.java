@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,17 +20,16 @@ import backend.User;
 
 public class Run {
 
-	static BufferedReader br = new BufferedReader(new InputStreamReader(
-			System.in));
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static LoginManager loginManager;
 	static OfferManager offerManager;
 
 	public static void main(String[] args) {
 		DatabaseConnector databaseConnector = null;
 		User user = null;
-		
+
 		try {
-			databaseConnector = new DatabaseConnector("data.db",loginManager);
+			databaseConnector = new DatabaseConnector("data.db", loginManager);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -56,16 +56,14 @@ public class Run {
 				e.printStackTrace();
 			}
 
-			if ((user = loginManager.loginUser(username,
-					Crypt.getSHA1(password))) != null) {
+			if ((user = loginManager.loginUser(username, Crypt.getSHA1(password))) != null) {
 				System.out.println("Login succesful");
 			} else {
 				System.out.println("Login unsuccesful");
 			}
 		} else {
 			user = registerUser(username);
-			loginManager.loginUser(username,
-					Crypt.getSHA1(user.getPasswordHash()));
+			loginManager.loginUser(username, Crypt.getSHA1(user.getPasswordHash()));
 
 		}
 		if (user.isLoggedIn()) {
@@ -107,21 +105,20 @@ public class Run {
 		System.out.println("Available Commands:");
 		System.out.println("help\t Print help");
 		System.out.println("list\t Prints all available Offers");
-		System.out
-				.println("search\t Searches in all offers and prints the result");
+		System.out.println("search\t Searches in all offers and prints the result");
 		System.out.println("show\t Prints a specific offer");
 		System.out.println("add\t Adds a offer");
 		System.out.println("last\t Lists the Offers you visited last");
 		System.out.println("show\t Prints a specific offer");
 	}
-	
-	public static void listOffers(){
-		for(Map.Entry<String, Offer> offer : offerManager.getOffers().entrySet()){
-			System.out.println(offer.getValue().toString()+"\n");
+
+	public static void listOffers() {
+		for (Map.Entry<String, Offer> offer : offerManager.getOffers().entrySet()) {
+			System.out.println(offer.getValue().toString() + "\n");
 		}
 	}
-	
-	public static void searchOffers(){
+
+	public static void searchOffers() {
 		System.out.println("Offer Search enter the searchstring:");
 		String haystack = "";
 		try {
@@ -130,37 +127,45 @@ public class Run {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for(Map.Entry<String, Offer> offer : offerManager.searchOffers(haystack).entrySet()){
-			System.out.println(offer.getValue().toString()+"\n");
+		for (Map.Entry<String, Offer> offer : offerManager.searchOffers(haystack).entrySet()) {
+			System.out.println(offer.getValue()+"\n");
 		}
 	}
-	
-	public static void showLastOffers(User user){
-		for(Integer offer:user.getVisitedOffers()){
+
+	public static void showLastOffers(User user) {
+		for (Integer offer : user.getVisitedOffers()) {
 			System.out.println(offerManager.getOfferById(offer)+"\n");
 		}
 	}
-	
-	public static void showOffer(User user){
+
+	public static void printOffer(Offer offer) {
+		User user = loginManager.getUserFromID(offer.getUserId());
+		System.out.println(offer);
+		System.out.println(user.getFirstName() + " " + user.getLastName() + "\nAddr:" + user.getAddress() + "\nTel:"
+				+ user.getTelefon()+"\n");
+
+	}
+
+	public static void showOffer(User user) {
 		System.out.println("Please enter OfferId:");
 		Integer OfferId = 0;
 		try {
 			String input = br.readLine();
-			OfferId=Integer.parseInt(input);
+			OfferId = Integer.parseInt(input);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Offer offer=offerManager.getOfferById(OfferId);
-		if(offer==null){
+		Offer offer = offerManager.getOfferById(OfferId);
+		if (offer == null) {
 			System.out.println("This ID does not exist\n");
 		} else {
 			loginManager.visitOffer(user, offer);
-			System.out.println(offer);
+			printOffer(offer);
 		}
 	}
-	
-	public static void addOffer(User user){
+
+	public static void addOffer(User user) {
 		System.out.println("Offer Creation enter the offer name:");
 		String name = "";
 		try {
@@ -178,7 +183,8 @@ public class Run {
 			e.printStackTrace();
 		}
 		try {
-			offerManager.addOffer(new Offer(name, description, user.getId(), new Date(new java.util.Date().getTime()), 0));
+			offerManager
+					.addOffer(new Offer(name, description, user.getId(), new Date(new java.util.Date().getTime()), 0));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -228,8 +234,7 @@ public class Run {
 		}
 		User user = null;
 		try {
-			user = loginManager.registerUser(username, password, firstname,
-					lastname, telefon, address);
+			user = loginManager.registerUser(username, password, firstname, lastname, telefon, address);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
