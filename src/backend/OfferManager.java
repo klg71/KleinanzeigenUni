@@ -1,6 +1,8 @@
 package backend;
 
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import persistence.DatabaseConnector;
@@ -11,7 +13,12 @@ public class OfferManager {
 	
 	public OfferManager(DatabaseConnector databaseConnector){
 		this.databaseConnector=databaseConnector;
-		offers=databaseConnector.loadOffers();
+		try {
+			offers=databaseConnector.loadOffers();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public HashMap<String, Offer> getOffers() {
@@ -30,6 +37,17 @@ public class OfferManager {
 	public HashMap<String,Offer> searchOffers(String haystack){
 		return (HashMap<String, Offer>) offers.entrySet().parallelStream().filter(entry->entry.getKey().contains(haystack)).collect(Collectors.toMap(entry->entry.getKey(),entry->entry.getValue() ));	
 	}
+
+	public Offer getOfferById(Integer offerId) {
+		for(Map.Entry<String, Offer> entry:offers.entrySet()){
+			if(entry.getValue().getId()==offerId){
+				return entry.getValue();
+			}
+		}
+		return null;
+	}
+	
+	
 	
 	
 }
