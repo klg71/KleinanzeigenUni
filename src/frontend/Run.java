@@ -28,7 +28,7 @@ public class Run {
 		User user = null;
 		
 		try {
-			databaseConnector = new DatabaseConnector("data.db");
+			databaseConnector = new DatabaseConnector("data.db",loginManager);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -113,9 +113,25 @@ public class Run {
 	
 	public static void listOffers(){
 		for(Map.Entry<String, Offer> offer : offerManager.getOffers().entrySet()){
-			System.out.println(offer.getValue().toString());
+			System.out.println(offer.getValue().toString()+"\n");
 		}
 	}
+	
+	public static void searchOffers(){
+		System.out.println("Offer Search enter the searchstring:");
+		String haystack = "";
+		try {
+			haystack = br.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for(Map.Entry<String, Offer> offer : offerManager.searchOffers(haystack).entrySet()){
+			System.out.println(offer.getValue().toString()+"\n");
+		}
+	}
+	
+	
 	
 	public static void addOffer(User user){
 		System.out.println("Offer Creation enter the offer name:");
@@ -135,7 +151,7 @@ public class Run {
 			e.printStackTrace();
 		}
 		try {
-			offerManager.addOffer(new Offer(name, description, user, new Date(new java.util.Date().getTime()), 0));
+			offerManager.addOffer(new Offer(name, description, user.getId(), new Date(new java.util.Date().getTime()), 0));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
