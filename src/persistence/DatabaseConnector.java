@@ -9,18 +9,23 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
+import backend.LoginManager;
 import backend.Offer;
 import backend.User;
 
 public class DatabaseConnector {
 	private String filename;
+	private LoginManager loginManager;
 
-	public DatabaseConnector(String filename) throws SQLException {
+	public DatabaseConnector(String filename,LoginManager loginManager) throws SQLException {
 		this.filename=filename;
+		this.loginManager=loginManager;
 	}
 
 	public User addUser(User newUser) throws IOException, SQLException {
@@ -99,17 +104,20 @@ public class DatabaseConnector {
 		}
 		Offer offer=null;
 		Statement statement = connection.createStatement();
-		String sql = "insert into Offers (name,description,timestamp) values (\""
+		String sql = "insert into Offers (name,description,timestamp,userid) values (\""
 				+ newOffer.getName()
 				+ "\",\""
 				+ newOffer.getDescription()
 				+ "\",\""
 				+ newOffer.getTime().getTime()
+				+ "\",\""
+				+ newOffer.getUserId()
 				+ "\");";
 		statement.execute(sql);
 		try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+			//Setzen des ID Feldes
             if (generatedKeys.next()) {
-               offer=new Offer(newOffer.getName(),newOffer.getDescription(),newOffer.getUser(),newOffer.getTime(),(int) generatedKeys.getLong(1));
+               offer=new Offer(newOffer.getName(),newOffer.getDescription(),newOffer.getUserId(),newOffer.getTime(),(int) generatedKeys.getLong(1));
             }
             else {
                 throw new SQLException("Creating user failed, no ID obtained.");
@@ -121,7 +129,7 @@ public class DatabaseConnector {
 		
 	}
 
-	public HashMap<String, Offer> loadOffers() {
+	public HashMap<String, Offer> loadOffers() throws SQLException {
 		Connection connection=null;
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -135,15 +143,49 @@ public class DatabaseConnector {
 		String sql = "select * from Offers";
 		ResultSet resultSet = statement.executeQuery(sql);
 		while (resultSet.next()) {
-			User user = new User(resultSet.getString("username"),
-					resultSet.getString("passwordHash"),
-					resultSet.getString("firstname"),
-					resultSet.getString("lastname"),
-					resultSet.getString("address"),
-					resultSet.getString("telefon"), resultSet.getInt("id"));
-			users.put(user.getUsername(), user);
+			Offer offer = null;
+			try {
+				offer = new Offer(resultSet.getString("name"),
+						resultSet.getString("description"),
+						resultSet.getInt("userid"),
+						resultSet.getDate("timestamp"),
+						resultSet.getInt("id"));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			offers.put(offer.getName(), offer);
 		}
 		connection.close();
 		return offers;
+	}
+
+	public void loadVisits(User user) throws SQLException {
+		
+		ArrayList<Integer> visits=new ArrayList<Integer>();
+		
+		Connection connection=null;
+		try {
+			Class.forName("org.sqlite.JDBC");
+			connection = DriverManager.getConnection("jdbc:sqlite:" + filename);
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		Statement statement = connection.createStatement();
+		String sql = "select * from visiting where UserId="+user.getId()+";";
+		ResultSet resultSet = statement.executeQuery(sql);
+		
+		while (resultSet.next()) {
+			try {
+				visits.add(resultSet.getInt("OfferId"));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		user.setVisitedOffers(visits);
+		connection.close();
+		
 	}
 }
