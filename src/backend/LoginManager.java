@@ -1,10 +1,7 @@
 package backend;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -45,6 +42,16 @@ public class LoginManager {
 			}
 		}
 		return null;
+	}
+	
+	public void visitOffer(User user,Offer offer){
+		user.addVisit(offer.getId());
+		try {
+			databaseConnector.addVisit(user,offer);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public User registerUser(String username, String password,String firstname,String lastname,String telefon,String address) throws Exception{
