@@ -200,7 +200,10 @@ public class DatabaseConnector {
 		}
 		Statement statement = connection.createStatement();
 		String sql = "insert into visiting (UserId,OfferId) values (\""+user.getId()+"\",\""+offer.getId()+"\");";
-		
+		System.out.println(sql);
+		statement.execute(sql);
+
+		statement.close();
 		connection.close();
 		
 	}
