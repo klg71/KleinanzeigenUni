@@ -6,17 +6,17 @@ import java.text.SimpleDateFormat;
 public class Offer {
 	private String name;
 	private String description;
-	private User user;
+	private Integer userId;
 	private Date time;
 	private SimpleDateFormat format;
 	private Integer id;
 
-	public Offer(String name, String description, User user, Date time,
+	public Offer(String name, String description, Integer userId, Date time,
 			Integer id) {
 		super();
 		this.name = name;
 		this.description = description;
-		this.user = user;
+		this.userId = userId;
 		this.time = time;
 		this.id = id;
 		format = new SimpleDateFormat("dd.MM.yyyy");
@@ -35,8 +35,8 @@ public class Offer {
 		return description;
 	}
 
-	public User getUser() {
-		return user;
+	public Integer getUserId() {
+		return userId;
 	}
 
 	public Date getTime() {
@@ -47,8 +47,7 @@ public class Offer {
 	public String toString() {
 		return "Offer " + name + " : " + format.format(time)+
 				" id: "+Integer.toString(id)+ "\n"
-				+ description + "\n\n From:" + user.getFirstName() + " "
-				+ user.getLastName() + " Tel:" + user.getTelefon();
+				+ description ;
 	}
 
 }
