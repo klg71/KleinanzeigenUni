@@ -1,5 +1,8 @@
 package backend;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class User {
 	private String username;
 	private String passwordHash;
@@ -10,6 +13,9 @@ public class User {
 
 	private Integer id;
 	private boolean loggedIn;
+	
+	private ArrayList<Integer> visitedOffers;
+	
 	
 	public User(String username, String passwordHash, String firstName,
 			String lastName, String address, String telefon, Integer id) {
@@ -22,8 +28,16 @@ public class User {
 		this.telefon = telefon;
 		this.id = id;
 		this.loggedIn=false;
+		visitedOffers=new ArrayList<Integer>();
 	}
 	
+	public void setVisitedOffers(ArrayList<Integer> visitedOffers){
+		this.visitedOffers=visitedOffers;
+	}
+
+	public ArrayList<Integer> getVisitedOffers() {
+		return visitedOffers;
+	}
 
 	public User(String fileString){
 		String[] splitted=fileString.split(":");
