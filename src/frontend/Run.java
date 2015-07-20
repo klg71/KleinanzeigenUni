@@ -95,7 +95,8 @@ public class Run {
 				if (command.equals("last")) {
 					showLastOffers(user);
 				}
-				System.out.println("Enter Command:");
+				if (!command.equals("exit"))
+					System.out.println("Enter Command:");
 			}
 		}
 
@@ -106,10 +107,11 @@ public class Run {
 		System.out.println("help\t Print help");
 		System.out.println("list\t Prints all available Offers");
 		System.out.println("search\t Searches in all offers and prints the result");
-		System.out.println("show\t Prints a specific offer");
+		System.out.println("show\t Prints a specific offer with address and telefon of Offercreator");
 		System.out.println("add\t Adds a offer");
 		System.out.println("last\t Lists the Offers you visited last");
 		System.out.println("show\t Prints a specific offer");
+		System.out.println("exit\t Exits the programm");
 	}
 
 	public static void listOffers() {
@@ -153,7 +155,6 @@ public class Run {
 			String input = br.readLine();
 			OfferId = Integer.parseInt(input);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Offer offer = offerManager.getOfferById(OfferId);
