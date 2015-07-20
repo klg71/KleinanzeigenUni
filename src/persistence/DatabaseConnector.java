@@ -188,4 +188,20 @@ public class DatabaseConnector {
 		connection.close();
 		
 	}
+
+	public void addVisit(User user, Offer offer) throws SQLException {
+		Connection connection=null;
+		try {
+			Class.forName("org.sqlite.JDBC");
+			connection = DriverManager.getConnection("jdbc:sqlite:" + filename);
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		Statement statement = connection.createStatement();
+		String sql = "insert into visiting (UserId,OfferId) values (\""+user.getId()+"\",\""+offer.getId()+"\");";
+		
+		connection.close();
+		
+	}
 }
