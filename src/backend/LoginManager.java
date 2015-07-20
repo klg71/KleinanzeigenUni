@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import persistence.DatabaseConnector;
 import persistence.FileConnector;
@@ -17,21 +19,6 @@ public class LoginManager {
 	
 	public LoginManager(DatabaseConnector databaseConnector){
 		this.databaseConnector=databaseConnector;
-		File file=new File("users.dat");
-//		if(!file.exists())
-//			try {
-//				file.createNewFile();
-//			} catch (IOException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-//		fileConnector=new FileConnector("users.dat");
-//		try {
-//			users=fileConnector.loadUsers();
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		try {
 			users=databaseConnector.loadUsers();
 		} catch (FileNotFoundException e) {
@@ -41,6 +28,23 @@ public class LoginManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		for(Map.Entry<String, User> user:users.entrySet()){
+			try {
+				databaseConnector.loadVisits(user.getValue());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public User getUserFromID(int id){
+		for(Entry<String, User> user:users.entrySet()){
+			if(user.getValue().getId()==id){
+				return user.getValue();
+			}
+		}
+		return null;
 	}
 	
 	public User registerUser(String username, String password,String firstname,String lastname,String telefon,String address) throws Exception{
