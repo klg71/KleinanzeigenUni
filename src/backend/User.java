@@ -18,6 +18,10 @@ public class User {
 	private ArrayList<String> searches;
 	
 	
+	public void setSearches(ArrayList<String> searches) {
+		this.searches = searches;
+	}
+
 	public User(String username, String passwordHash, String firstName,
 			String lastName, String address, String telefon, Integer id) {
 		super();

@@ -8,7 +8,27 @@ public class Offer {
 	private String description;
 	private Integer userId;
 	private Integer categoryID;
+	private boolean available;
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setCategoryID(Integer categoryID) {
+		this.categoryID = categoryID;
+	}
+
+	public void setAvailable(boolean available) {
+		this.available = available;
+	}
+
+	public boolean isAvailable() {
+		return available;
+	}
 	private Date time;
 	private SimpleDateFormat format;
 	private Integer id;

@@ -28,6 +28,7 @@ public class LoginManager {
 		for(Map.Entry<String, User> user:users.entrySet()){
 			try {
 				databaseConnector.loadVisits(user.getValue());
+				databaseConnector.loadSearches(user.getValue());
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

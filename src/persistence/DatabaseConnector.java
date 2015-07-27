@@ -24,13 +24,14 @@ public class DatabaseConnector {
 	private String filename;
 	private LoginManager loginManager;
 
-	public DatabaseConnector(String filename,LoginManager loginManager) throws SQLException {
-		this.filename=filename;
-		this.loginManager=loginManager;
+	public DatabaseConnector(String filename, LoginManager loginManager)
+			throws SQLException {
+		this.filename = filename;
+		this.loginManager = loginManager;
 	}
 
 	public User addUser(User newUser) throws IOException, SQLException {
-		Connection connection=null;
+		Connection connection = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			connection = DriverManager.getConnection("jdbc:sqlite:" + filename);
@@ -38,7 +39,7 @@ public class DatabaseConnector {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
-		User user=null;
+		User user = null;
 		Statement statement = connection.createStatement();
 		String sql = "insert into Users (username,passwordHash,firstname,lastname,address,telefon) values (\""
 				+ newUser.getUsername()
@@ -53,15 +54,17 @@ public class DatabaseConnector {
 				+ "\",\"" + newUser.getTelefon() + "\");";
 		statement.execute(sql);
 
-        try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-            if (generatedKeys.next()) {
-               user=new User(newUser.getUsername(), newUser.getPasswordHash(), newUser.getFirstName(), newUser.getLastName(), newUser.getAddress(), newUser.getTelefon(),(int) generatedKeys.getLong(1));
-            }
-            else {
-                throw new SQLException("Creating user failed, no ID obtained.");
-            }
-        }
-        statement.close();
+		try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+			if (generatedKeys.next()) {
+				user = new User(newUser.getUsername(),
+						newUser.getPasswordHash(), newUser.getFirstName(),
+						newUser.getLastName(), newUser.getAddress(),
+						newUser.getTelefon(), (int) generatedKeys.getLong(1));
+			} else {
+				throw new SQLException("Creating user failed, no ID obtained.");
+			}
+		}
+		statement.close();
 		connection.close();
 		return user;
 
@@ -69,7 +72,7 @@ public class DatabaseConnector {
 
 	public HashMap<String, User> loadUsers() throws FileNotFoundException,
 			SQLException {
-		Connection connection=null;
+		Connection connection = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			connection = DriverManager.getConnection("jdbc:sqlite:" + filename);
@@ -95,7 +98,7 @@ public class DatabaseConnector {
 	}
 
 	public Offer addOffer(Offer newOffer) throws SQLException {
-		Connection connection=null;
+		Connection connection = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			connection = DriverManager.getConnection("jdbc:sqlite:" + filename);
@@ -103,7 +106,7 @@ public class DatabaseConnector {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
-		Offer offer=null;
+		Offer offer = null;
 		Statement statement = connection.createStatement();
 		String sql = "insert into Offers (name,description,timestamp,userid) values (\""
 				+ newOffer.getName()
@@ -112,26 +115,26 @@ public class DatabaseConnector {
 				+ "\",\""
 				+ newOffer.getTime().getTime()
 				+ "\",\""
-				+ newOffer.getUserId()
-				+ "\");";
+				+ newOffer.getUserId() + "\");";
 		statement.execute(sql);
 		try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-			//Setzen des ID Feldes
-            if (generatedKeys.next()) {
-               offer=new Offer(newOffer.getName(),newOffer.getDescription(),newOffer.getUserId(),newOffer.getTime(),(int) generatedKeys.getLong(1),0);
-            }
-            else {
-                throw new SQLException("Creating user failed, no ID obtained.");
-            }
-        }
+			// Setzen des ID Feldes
+			if (generatedKeys.next()) {
+				offer = new Offer(newOffer.getName(),
+						newOffer.getDescription(), newOffer.getUserId(),
+						newOffer.getTime(), (int) generatedKeys.getLong(1), 0);
+			} else {
+				throw new SQLException("Creating user failed, no ID obtained.");
+			}
+		}
 		statement.close();
 		connection.close();
 		return offer;
-		
+
 	}
 
 	public HashMap<String, Offer> loadOffers() throws SQLException {
-		Connection connection=null;
+		Connection connection = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			connection = DriverManager.getConnection("jdbc:sqlite:" + filename);
@@ -149,8 +152,8 @@ public class DatabaseConnector {
 				offer = new Offer(resultSet.getString("name"),
 						resultSet.getString("description"),
 						resultSet.getInt("userid"),
-						resultSet.getDate("timestamp"),
-						resultSet.getInt("id"),resultSet.getInt("category"));
+						resultSet.getDate("timestamp"), resultSet.getInt("id"),
+						resultSet.getInt("category"));
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -162,10 +165,10 @@ public class DatabaseConnector {
 	}
 
 	public void loadVisits(User user) throws SQLException {
-		
-		ArrayList<Integer> visits=new ArrayList<Integer>();
-		
-		Connection connection=null;
+
+		ArrayList<Integer> visits = new ArrayList<Integer>();
+
+		Connection connection = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			connection = DriverManager.getConnection("jdbc:sqlite:" + filename);
@@ -174,11 +177,13 @@ public class DatabaseConnector {
 			System.exit(0);
 		}
 		Statement statement = connection.createStatement();
-		String sql = "select * from visiting where UserId="+user.getId()+";";
+		String sql = "select * from visiting where UserId=" + user.getId()
+				+ ";";
 		ResultSet resultSet = statement.executeQuery(sql);
-		
+
 		while (resultSet.next()) {
-			try {http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=90
+			try {
+				http: // marketplace.eclipse.org/marketplace-client-intro?mpc_install=90
 				visits.add(resultSet.getInt("OfferId"));
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -187,11 +192,11 @@ public class DatabaseConnector {
 		}
 		user.setVisitedOffers(visits);
 		connection.close();
-		
+
 	}
 
 	public void addVisit(User user, Offer offer) throws SQLException {
-		Connection connection=null;
+		Connection connection = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			connection = DriverManager.getConnection("jdbc:sqlite:" + filename);
@@ -200,17 +205,18 @@ public class DatabaseConnector {
 			System.exit(0);
 		}
 		Statement statement = connection.createStatement();
-		String sql = "insert into visiting (UserId,OfferId) values (\""+user.getId()+"\",\""+offer.getId()+"\");";
+		String sql = "insert into visiting (UserId,OfferId) values (\""
+				+ user.getId() + "\",\"" + offer.getId() + "\");";
 		System.out.println(sql);
 		statement.execute(sql);
 
 		statement.close();
 		connection.close();
-		
+
 	}
-	
-	public void addSearch(User user,String search) throws SQLException{
-		Connection connection=null;
+
+	public void addSearch(User user, String search) throws SQLException {
+		Connection connection = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			connection = DriverManager.getConnection("jdbc:sqlite:" + filename);
@@ -219,20 +225,20 @@ public class DatabaseConnector {
 			System.exit(0);
 		}
 		Statement statement = connection.createStatement();
-		String sql = "insert into searches (User,Search) values (\""+user.getId()+"\",\""+search+"\");";
+		String sql = "insert into searches (User,Search) values (\""
+				+ user.getId() + "\",\"" + search + "\");";
 		System.out.println(sql);
 		statement.execute(sql);
 
 		statement.close();
 		connection.close();
-		
+
 	}
 
-	public ArrayList<Category> loadCategories() throws SQLException {
+	public void loadSearches(User user) throws SQLException {
+		ArrayList<String> searches = new ArrayList<String>();
 
-		ArrayList<Category> categories=new ArrayList<Category>();
-		
-		Connection connection=null;
+		Connection connection = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			connection = DriverManager.getConnection("jdbc:sqlite:" + filename);
@@ -240,14 +246,45 @@ public class DatabaseConnector {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
-		
+		Statement statement = connection.createStatement();
+		String sql = "select * from searches where User=" + user.getId()
+				+ ";";
+		ResultSet resultSet = statement.executeQuery(sql);
+
+		while (resultSet.next()) {
+			try {
+				searches.add(resultSet.getString("Search"));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		user.setSearches(searches);
+		connection.close();
+	}
+
+	public HashMap<Integer, Category> loadCategories() throws SQLException {
+
+		HashMap<Integer, Category> categories = new HashMap<Integer, Category>();
+
+		Connection connection = null;
+		try {
+			Class.forName("org.sqlite.JDBC");
+			connection = DriverManager.getConnection("jdbc:sqlite:" + filename);
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+
 		Statement statement = connection.createStatement();
 		String sql = "select * from categories;";
 		ResultSet resultSet = statement.executeQuery(sql);
-		
+
 		while (resultSet.next()) {
 			try {
-				categories.add(new Category(resultSet.getString("Name"), resultSet.getString("Description"), resultSet.getInt("id")));
+				categories.put(resultSet.getInt("id"),new Category(resultSet.getString("Name"),
+						resultSet.getString("Description"), resultSet
+								.getInt("id")));
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

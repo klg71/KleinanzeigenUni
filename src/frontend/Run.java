@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import persistence.DatabaseConnector;
+import backend.Category;
+import backend.CategoryManager;
 import backend.Crypt;
 import backend.LoginManager;
 import backend.Offer;
@@ -20,9 +22,11 @@ import backend.User;
 
 public class Run {
 
-	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static BufferedReader br = new BufferedReader(new InputStreamReader(
+			System.in));
 	static LoginManager loginManager;
 	static OfferManager offerManager;
+	static CategoryManager categoryManager;
 
 	public static void main(String[] args) {
 		DatabaseConnector databaseConnector = null;
@@ -36,6 +40,7 @@ public class Run {
 		}
 		loginManager = new LoginManager(databaseConnector);
 		offerManager = new OfferManager(databaseConnector);
+		categoryManager = new CategoryManager(databaseConnector);
 		System.out.println("Login Manager Demo");
 		System.out.println("Please Enter your username:");
 		br = new BufferedReader(new InputStreamReader(System.in));
@@ -56,14 +61,16 @@ public class Run {
 				e.printStackTrace();
 			}
 
-			if ((user = loginManager.loginUser(username, Crypt.getSHA1(password))) != null) {
+			if ((user = loginManager.loginUser(username,
+					Crypt.getSHA1(password))) != null) {
 				System.out.println("Login succesful");
 			} else {
 				System.out.println("Login unsuccesful");
 			}
 		} else {
 			user = registerUser(username);
-			loginManager.loginUser(username, Crypt.getSHA1(user.getPasswordHash()));
+			loginManager.loginUser(username,
+					Crypt.getSHA1(user.getPasswordHash()));
 
 		}
 		if (user.isLoggedIn()) {
@@ -95,9 +102,22 @@ public class Run {
 				if (command.equals("last")) {
 					showLastOffers(user);
 				}
+				if (command.equals("categories")) {
+					printCategories();
+				}
 				if (!command.equals("exit"))
 					System.out.println("Enter Command:");
 			}
+		}
+
+	}
+
+	private static void printCategories() {
+		for (Map.Entry<Integer, Category> category : categoryManager
+				.getCategories().entrySet()) {
+			System.out.println(category.getKey() + "\t"
+					+ category.getValue().getName() + "\t"
+					+ category.getValue().getDescription());
 		}
 
 	}
@@ -106,17 +126,22 @@ public class Run {
 		System.out.println("Available Commands:");
 		System.out.println("help\t Print help");
 		System.out.println("list\t Prints all available Offers");
-		System.out.println("search\t Searches in all offers and prints the result");
-		System.out.println("show\t Prints a specific offer with address and telefon of Offercreator");
+		System.out
+				.println("search\t Searches in all offers and prints the result");
+		System.out
+				.println("show\t Prints a specific offer with address and telefon of Offercreator");
 		System.out.println("add\t Adds a offer");
-		System.out.println("suggest\t Suggests you Offers based on your searched and visited");
+		System.out
+				.println("suggest\t Suggests you Offers based on your searched and visited");
 		System.out.println("last\t Lists the Offers you visited last");
 		System.out.println("show\t Prints a specific offer");
+		System.out.println("categories\t Prints all categories");
 		System.out.println("exit\t Exits the programm");
 	}
 
 	public static void listOffers() {
-		for (Map.Entry<String, Offer> offer : offerManager.getOffers().entrySet()) {
+		for (Map.Entry<String, Offer> offer : offerManager.getOffers()
+				.entrySet()) {
 			System.out.println(offer.getValue().toString() + "\n");
 		}
 	}
@@ -130,7 +155,27 @@ public class Run {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for (Map.Entry<String, Offer> offer : offerManager.searchOffers(haystack).entrySet()) {
+		boolean entered=false;
+		Integer category = 0;
+		while(!entered){
+			printCategories();
+			System.out.println("0\tAll\tFür alle Kategorien");
+			System.out.println("Enter the Category:");
+			try {
+				category = Integer.parseInt(br.readLine());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(categoryManager.getCategories().containsKey(category)||category==0)
+				entered=true;
+			else {
+				System.out.println("Please Enter valid Category");
+			}
+		}
+		
+		
+		for (Map.Entry<String, Offer> offer : offerManager.searchOffers(haystack,category).entrySet()) {
 			System.out.println(offer.getValue()+"\n");
 		}
 		loginManager.searchOffers(user, haystack);
@@ -138,15 +183,16 @@ public class Run {
 
 	public static void showLastOffers(User user) {
 		for (Integer offer : user.getVisitedOffers()) {
-			System.out.println(offerManager.getOfferById(offer)+"\n");
+			System.out.println(offerManager.getOfferById(offer) + "\n");
 		}
 	}
 
 	public static void printOffer(Offer offer) {
 		User user = loginManager.getUserFromID(offer.getUserId());
 		System.out.println(offer);
-		System.out.println(user.getFirstName() + " " + user.getLastName() + "\nAddr:" + user.getAddress() + "\nTel:"
-				+ user.getTelefon()+"\n");
+		System.out.println(user.getFirstName() + " " + user.getLastName()
+				+ "\nAddr:" + user.getAddress() + "\nTel:" + user.getTelefon()
+				+ "\n");
 
 	}
 
@@ -185,9 +231,26 @@ public class Run {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		boolean entered = false;
+		Integer category = 0;
+		while (!entered) {
+			printCategories();
+			System.out.println("Enter the Category:");
+			try {
+				category = Integer.parseInt(br.readLine());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (categoryManager.getCategories().containsKey(category))
+				entered = true;
+			else {
+				System.out.println("Please Enter valid Category");
+			}
+		}
 		try {
-			offerManager
-					.addOffer(new Offer(name, description, user.getId(), new Date(new java.util.Date().getTime()), 0,0));
+			offerManager.addOffer(new Offer(name, description, user.getId(),
+					new Date(new java.util.Date().getTime()), 0, category));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -237,7 +300,8 @@ public class Run {
 		}
 		User user = null;
 		try {
-			user = loginManager.registerUser(username, password, firstname, lastname, telefon, address);
+			user = loginManager.registerUser(username, password, firstname,
+					lastname, telefon, address);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
