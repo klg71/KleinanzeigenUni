@@ -108,21 +108,23 @@ public class DatabaseConnector {
 		}
 		Offer offer = null;
 		Statement statement = connection.createStatement();
-		String sql = "insert into Offers (name,description,timestamp,userid) values (\""
+		String sql = "insert into Offers (name,description,timestamp,userid,category) values (\""
 				+ newOffer.getName()
 				+ "\",\""
 				+ newOffer.getDescription()
 				+ "\",\""
 				+ newOffer.getTime().getTime()
 				+ "\",\""
-				+ newOffer.getUserId() + "\");";
+				+ newOffer.getUserId()
+				+ "\",\""
+				+ newOffer.getCategoryID() + "\");";
 		statement.execute(sql);
 		try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
 			// Setzen des ID Feldes
 			if (generatedKeys.next()) {
 				offer = new Offer(newOffer.getName(),
 						newOffer.getDescription(), newOffer.getUserId(),
-						newOffer.getTime(), (int) generatedKeys.getLong(1), 0);
+						newOffer.getTime(), (int) generatedKeys.getLong(1), newOffer.getCategoryID());
 			} else {
 				throw new SQLException("Creating user failed, no ID obtained.");
 			}
@@ -207,7 +209,6 @@ public class DatabaseConnector {
 		Statement statement = connection.createStatement();
 		String sql = "insert into visiting (UserId,OfferId) values (\""
 				+ user.getId() + "\",\"" + offer.getId() + "\");";
-		System.out.println(sql);
 		statement.execute(sql);
 
 		statement.close();
@@ -227,7 +228,6 @@ public class DatabaseConnector {
 		Statement statement = connection.createStatement();
 		String sql = "insert into searches (User,Search) values (\""
 				+ user.getId() + "\",\"" + search + "\");";
-		System.out.println(sql);
 		statement.execute(sql);
 
 		statement.close();

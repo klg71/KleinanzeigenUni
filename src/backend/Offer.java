@@ -66,10 +66,14 @@ public class Offer {
 		return time;
 	}
 
+	public String getTimeString(){
+		return format.format(time);
+	}
+	
 	@Override
 	public String toString() {
 		return "Offer: " + name + " : " + format.format(time)+
-				" id: "+Integer.toString(id)+ "\n"
+				" id: "+Integer.toString(id)+ "\n"+"Category: "+categoryID+"\n"
 				+ description ;
 	}
 	public Integer getCategoryID() {

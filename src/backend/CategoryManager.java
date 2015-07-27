@@ -23,4 +23,5 @@ public class CategoryManager {
 	public HashMap<Integer, Category> getCategories() {
 		return categories;
 	}
+	
 }

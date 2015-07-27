@@ -63,17 +63,17 @@ public class Run {
 
 			if ((user = loginManager.loginUser(username,
 					Crypt.getSHA1(password))) != null) {
-				System.out.println("Login succesful");
+				System.out.println("Login successful");
 			} else {
-				System.out.println("Login unsuccesful");
+				System.out.println("Login unsuccessful");
 			}
 		} else {
 			user = registerUser(username);
-			loginManager.loginUser(username,
-					Crypt.getSHA1(user.getPasswordHash()));
+			loginManager.loginUser(username,user.getPasswordHash());
 
 		}
 		if (user.isLoggedIn()) {
+			System.out.println("\nShow All Commands with command: help");
 			System.out.println("\nEnter Command:");
 
 			String command = "";
@@ -130,11 +130,12 @@ public class Run {
 				.println("search\t Searches in all offers and prints the result");
 		System.out
 				.println("show\t Prints a specific offer with address and telefon of Offercreator");
+		System.out
+		.println("edit\t Edits a specific offer with address and telefon of Offercreator");
 		System.out.println("add\t Adds a offer");
 		System.out
 				.println("suggest\t Suggests you Offers based on your searched and visited");
 		System.out.println("last\t Lists the Offers you visited last");
-		System.out.println("show\t Prints a specific offer");
 		System.out.println("categories\t Prints all categories");
 		System.out.println("exit\t Exits the programm");
 	}
@@ -142,7 +143,7 @@ public class Run {
 	public static void listOffers() {
 		for (Map.Entry<String, Offer> offer : offerManager.getOffers()
 				.entrySet()) {
-			System.out.println(offer.getValue().toString() + "\n");
+			printSmallOffer(offer.getValue());
 		}
 	}
 
@@ -174,26 +175,37 @@ public class Run {
 			}
 		}
 		
-		
-		for (Map.Entry<String, Offer> offer : offerManager.searchOffers(haystack,category).entrySet()) {
-			System.out.println(offer.getValue()+"\n");
+		Map<String, Offer> results=offerManager.searchOffers(haystack,category);
+		for (Map.Entry<String, Offer> offer :results.entrySet()) {
+			printSmallOffer(offer.getValue());
+		}
+		if(results.size()==0){
+			System.out.println("No Offers found");
 		}
 		loginManager.searchOffers(user, haystack);
 	}
 
 	public static void showLastOffers(User user) {
 		for (Integer offer : user.getVisitedOffers()) {
-			System.out.println(offerManager.getOfferById(offer) + "\n");
+			printSmallOffer(offerManager.getOfferById(offer));
 		}
 	}
 
 	public static void printOffer(Offer offer) {
 		User user = loginManager.getUserFromID(offer.getUserId());
-		System.out.println(offer);
+		System.out.println("Offer: " + offer.getName() + " : " + offer.getTimeString()+
+				" id: "+Integer.toString(offer.getId())+ "\n"+categoryManager.getCategories().get(offer.getCategoryID())+"\n"
+				+ offer.getDescription());
 		System.out.println(user.getFirstName() + " " + user.getLastName()
 				+ "\nAddr:" + user.getAddress() + "\nTel:" + user.getTelefon()
 				+ "\n");
 
+	}
+	
+	public static void printSmallOffer(Offer offer){
+		System.out.println("Offer: " + offer.getName() + " : " + offer.getTimeString()+
+				" id: "+Integer.toString(offer.getId())+ "\n"+categoryManager.getCategories().get(offer.getCategoryID())+"\n"
+				+ offer.getDescription());
 	}
 
 	public static void showOffer(User user) {
