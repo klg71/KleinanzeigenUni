@@ -3,7 +3,6 @@ package backend;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import persistence.DatabaseConnector;
 
