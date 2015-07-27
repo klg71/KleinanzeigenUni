@@ -54,6 +54,15 @@ public class LoginManager {
 		}
 	}
 	
+	public void searchOffers(User user,String search){
+		try {
+			databaseConnector.addSearch(user, search);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public User registerUser(String username, String password,String firstname,String lastname,String telefon,String address) throws Exception{
 		User user=new User(username,Crypt.getSHA1(password),firstname,lastname,address,telefon,0);
 		if(!users.containsKey(username)){

@@ -84,7 +84,7 @@ public class Run {
 					listOffers();
 				}
 				if (command.equals("search")) {
-					searchOffers();
+					searchOffers(user);
 				}
 				if (command.equals("show")) {
 					showOffer(user);
@@ -121,7 +121,7 @@ public class Run {
 		}
 	}
 
-	public static void searchOffers() {
+	public static void searchOffers(User user) {
 		System.out.println("Offer Search enter the searchstring:");
 		String haystack = "";
 		try {
@@ -133,6 +133,7 @@ public class Run {
 		for (Map.Entry<String, Offer> offer : offerManager.searchOffers(haystack).entrySet()) {
 			System.out.println(offer.getValue()+"\n");
 		}
+		loginManager.searchOffers(user, haystack);
 	}
 
 	public static void showLastOffers(User user) {

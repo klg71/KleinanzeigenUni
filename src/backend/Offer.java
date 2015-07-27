@@ -8,6 +8,7 @@ public class Offer {
 	private String description;
 	private Integer userId;
 	private Integer categoryID;
+
 	private Date time;
 	private SimpleDateFormat format;
 	private Integer id;
@@ -50,6 +51,9 @@ public class Offer {
 		return "Offer: " + name + " : " + format.format(time)+
 				" id: "+Integer.toString(id)+ "\n"
 				+ description ;
+	}
+	public Integer getCategoryID() {
+		return categoryID;
 	}
 
 }

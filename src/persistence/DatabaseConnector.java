@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
+import backend.Category;
 import backend.LoginManager;
 import backend.Offer;
 import backend.User;
@@ -149,7 +150,7 @@ public class DatabaseConnector {
 						resultSet.getString("description"),
 						resultSet.getInt("userid"),
 						resultSet.getDate("timestamp"),
-						resultSet.getInt("id"),0);
+						resultSet.getInt("id"),resultSet.getInt("category"));
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -206,5 +207,53 @@ public class DatabaseConnector {
 		statement.close();
 		connection.close();
 		
+	}
+	
+	public void addSearch(User user,String search) throws SQLException{
+		Connection connection=null;
+		try {
+			Class.forName("org.sqlite.JDBC");
+			connection = DriverManager.getConnection("jdbc:sqlite:" + filename);
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		Statement statement = connection.createStatement();
+		String sql = "insert into searches (User,Search) values (\""+user.getId()+"\",\""+search+"\");";
+		System.out.println(sql);
+		statement.execute(sql);
+
+		statement.close();
+		connection.close();
+		
+	}
+
+	public ArrayList<Category> loadCategories() throws SQLException {
+
+		ArrayList<Category> categories=new ArrayList<Category>();
+		
+		Connection connection=null;
+		try {
+			Class.forName("org.sqlite.JDBC");
+			connection = DriverManager.getConnection("jdbc:sqlite:" + filename);
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		
+		Statement statement = connection.createStatement();
+		String sql = "select * from categories;";
+		ResultSet resultSet = statement.executeQuery(sql);
+		
+		while (resultSet.next()) {
+			try {
+				categories.add(new Category(resultSet.getString("Name"), resultSet.getString("Description"), resultSet.getInt("id")));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		connection.close();
+		return categories;
 	}
 }
