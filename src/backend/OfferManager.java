@@ -2,8 +2,13 @@ package backend;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import persistence.DatabaseConnector;
@@ -57,57 +62,55 @@ public class OfferManager {
 	}
 
 	public HashMap<String, Offer> suggestOffers(User user) {
-		HashMap<String, Offer> retMap = new HashMap<String, Offer>();
+		//Endgültiges Ergebnis
+		HashMap<String,Offer> returnMap=new HashMap<String,Offer>();
+		//Alle relevanten Angebote
+		HashMap<String, Offer> fullMap = new HashMap<String, Offer>();
+		
+		//Füge besuchten zur Liste hinzu
 		for (Integer offer : user.getVisitedOffers()) {
-			retMap.put(getOfferById(offer).getName(), getOfferById(offer));
+			fullMap.put(getOfferById(offer).getName(), getOfferById(offer));
 		}
+		//Füge alle aus Suchen hinzu
 		for (String search : user.getSearches()) {
-			retMap.putAll(searchOffers(search));
+			fullMap.putAll(searchOffers(search));
 		}
 
-		HashMap<String, Offer> removedMap = new HashMap<String, Offer>();
-		boolean found = false;
-		for (Map.Entry<String, Offer> entry : retMap.entrySet()) {
-			for (Map.Entry<String, Offer> entry1 : removedMap.entrySet()) {
-				if (entry1.getValue() == entry.getValue()) {
-					found = true;
-				}
+		//Generiere geordnete Liste
+		HashMap<Offer,Integer> orderedMap=new HashMap<Offer,Integer>();
+		
+		//Gehe durch alle Elemente durch
+		for(Map.Entry<String, Offer> entry: fullMap.entrySet()){
+			if(orderedMap.containsKey(entry.getValue())){
+				orderedMap.put(entry.getValue(), orderedMap.get(entry.getValue())+1);
+			}else {
+				orderedMap.put(entry.getValue(), 1);
 			}
-			if (!found) {
-				removedMap.put(entry.getKey(), entry.getValue());
-			}
-			found = false;
 		}
-		if (removedMap.size() < 3) {
-			return removedMap;
+		
+		//Häufigste nach oben sortieren
+		List<Map.Entry<Offer,Integer>> sortedList=new LinkedList<Map.Entry<Offer,Integer>>(orderedMap.entrySet());
+		Collections.sort(sortedList,new Comparator<Map.Entry<Offer,Integer>>()
+				{
+
+			@Override
+			public int compare(Entry<Offer, Integer> o1,
+					Entry<Offer, Integer> o2) {
+				return o1.getValue()-o2.getValue();
+			}
+		});
+		
+		//Elemente zurückgeben
+		if (sortedList.size() < 3) {
+			for(Entry<Offer, Integer> Entry:sortedList){
+				returnMap.put(Entry.getKey().getName(), Entry.getKey());
+			}
 		} else {
-			Random rand = new Random();
-			ArrayList<Integer> suggestPos = new ArrayList<Integer>();
-			Integer number = 0;
-			while (suggestPos.size() < 3) {
-				number = rand.nextInt(retMap.size());
-				for (Integer numberInList : suggestPos) {
-					if (numberInList == number)
-						found = true;
-				}
-				if (!found)
-					suggestPos.add(number);
-				found = false;
+			for(int i=0;i<3;i++){
+				returnMap.put(sortedList.get(i).getKey().getName(), sortedList.get(i).getKey());
 			}
-
-			HashMap<String, Offer> suggestMap = new HashMap<String, Offer>();
-			Integer i = 0;
-			for (Integer suggest : suggestPos) {
-				i=0;
-				for (Map.Entry<String, Offer> entry : removedMap.entrySet()) {
-					if(i==suggest){
-						suggestMap.put(entry.getKey(),entry.getValue());
-					}
-				}
-				i++;
-			}
-			return suggestMap;
 		}
+		return returnMap;
 	}
 
 }
