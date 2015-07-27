@@ -15,6 +15,7 @@ public class User {
 	private boolean loggedIn;
 	
 	private ArrayList<Integer> visitedOffers;
+	private ArrayList<String> searches;
 	
 	
 	public User(String username, String passwordHash, String firstName,
@@ -29,8 +30,13 @@ public class User {
 		this.id = id;
 		this.loggedIn=false;
 		visitedOffers=new ArrayList<Integer>();
+		searches=new ArrayList<String>();
 	}
 	
+	public ArrayList<String> getSearches() {
+		return searches;
+	}
+
 	public void setVisitedOffers(ArrayList<Integer> visitedOffers){
 		this.visitedOffers=visitedOffers;
 	}
@@ -104,6 +110,9 @@ public class User {
 	
 	public void addVisit(Integer offerId){
 		visitedOffers.add(offerId);
+	}	
+	public void addSearch(String search){
+		searches.add(search);
 	}
 	
 }

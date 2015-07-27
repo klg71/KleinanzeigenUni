@@ -117,7 +117,7 @@ public class DatabaseConnector {
 		try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
 			//Setzen des ID Feldes
             if (generatedKeys.next()) {
-               offer=new Offer(newOffer.getName(),newOffer.getDescription(),newOffer.getUserId(),newOffer.getTime(),(int) generatedKeys.getLong(1));
+               offer=new Offer(newOffer.getName(),newOffer.getDescription(),newOffer.getUserId(),newOffer.getTime(),(int) generatedKeys.getLong(1),0);
             }
             else {
                 throw new SQLException("Creating user failed, no ID obtained.");
@@ -149,7 +149,7 @@ public class DatabaseConnector {
 						resultSet.getString("description"),
 						resultSet.getInt("userid"),
 						resultSet.getDate("timestamp"),
-						resultSet.getInt("id"));
+						resultSet.getInt("id"),0);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -109,6 +109,7 @@ public class Run {
 		System.out.println("search\t Searches in all offers and prints the result");
 		System.out.println("show\t Prints a specific offer with address and telefon of Offercreator");
 		System.out.println("add\t Adds a offer");
+		System.out.println("suggest\t Suggests you Offers based on your searched and visited");
 		System.out.println("last\t Lists the Offers you visited last");
 		System.out.println("show\t Prints a specific offer");
 		System.out.println("exit\t Exits the programm");
@@ -185,7 +186,7 @@ public class Run {
 		}
 		try {
 			offerManager
-					.addOffer(new Offer(name, description, user.getId(), new Date(new java.util.Date().getTime()), 0));
+					.addOffer(new Offer(name, description, user.getId(), new Date(new java.util.Date().getTime()), 0,0));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
