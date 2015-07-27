@@ -35,7 +35,14 @@ public class OfferManager {
 	}
 	
 	public HashMap<String,Offer> searchOffers(String haystack){
-		return (HashMap<String, Offer>) offers.entrySet().parallelStream().filter(entry->entry.getKey().contains(haystack)).collect(Collectors.toMap(entry->entry.getKey(),entry->entry.getValue() ));	
+		HashMap<String,Offer> retMap=new HashMap<String,Offer>();
+		for(Map.Entry<String,Offer> entry:offers.entrySet()){
+			if(entry.getKey().contains(haystack)){
+				retMap.put(entry.getKey(), entry.getValue());
+			}
+		}
+		return retMap;
+		//return (HashMap<String, Offer>) offers.entrySet().parallelStream().filter(entry->entry.getKey().contains(haystack)).collect(Collectors.toMap(entry->entry.getKey(),entry->entry.getValue() ));	
 	}
 
 	public Offer getOfferById(Integer offerId) {
