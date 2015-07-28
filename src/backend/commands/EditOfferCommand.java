@@ -24,6 +24,7 @@ public class EditOfferCommand extends Command {
 			String name = "";
 			String description="";
 			Offer offer=null;
+			
 			int category = 0;
 			switch (parameters.size()) {
 			case 0:
@@ -34,6 +35,14 @@ public class EditOfferCommand extends Command {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				if(offerManager.getOfferById(OfferId)!=null){
+					offer=offerManager.getOfferById(OfferId);
+				}
+				else {
+					System.out.println("No Offer found");
+					return;
+				}
+				
 				
 			case 1:
 				if (parameters.size()==1){
@@ -69,7 +78,7 @@ public class EditOfferCommand extends Command {
 				
 				System.out.println("Enter new description("+offer.getName()+"):");
 				try {
-					name = br.readLine();
+					description = br.readLine();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -124,6 +133,10 @@ public class EditOfferCommand extends Command {
 					System.out.println("Please Enter valid Category");
 					return;
 				}
+			}
+			if(offer.getUserId()!=currentUser.getId()){
+				System.out.println("You cant edit this!");
+				return;
 			}
 			offer.setName(name);
 			offer.setDescription(description);
