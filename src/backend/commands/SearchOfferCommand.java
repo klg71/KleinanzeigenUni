@@ -38,7 +38,9 @@ public class SearchOfferCommand extends Command {
 				e.printStackTrace();
 			}
 		case 1:
-			haystack = parameters.get(0);
+			if(parameters.size()==1){
+				haystack = parameters.get(0);
+			}
 			boolean entered = false;
 			while (!entered) {
 				printCategories();

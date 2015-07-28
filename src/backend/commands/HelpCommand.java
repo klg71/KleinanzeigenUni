@@ -26,10 +26,11 @@ public class HelpCommand extends Command {
 		System.out
 				.println("search\t Searches in all offers and prints the result");
 		System.out
-				.println("show\t Prints a specific offer with address and telefon of Offercreator");
-		System.out
-		.println("edit\t Edits a specific offer with address and telefon of Offercreator");
+.println("show\t Prints a specific offer with address and telefon of Offercreator");
 		System.out.println("add\t Adds a offer");
+		System.out.println("edit\t Edits a specific offer");
+		System.out.println("delete\t Deletes a specific offer");
+		System.out.println("disable\\enable\t Disables\\Enables a specific offer");
 		System.out
 				.println("suggest\t Suggests you Offers based on your searched and visited");
 		System.out.println("last\t Lists the Offers you visited last");

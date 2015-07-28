@@ -34,7 +34,7 @@ public class Offer {
 	private Integer id;
 
 	public Offer(String name, String description, Integer userId, Date time,
-			Integer id,Integer categoryID) {
+			Integer id,Integer categoryID,int available) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -43,6 +43,7 @@ public class Offer {
 		this.id = id;
 		this.categoryID=categoryID;
 		format = new SimpleDateFormat("dd.MM.yyyy");
+		this.available=available==1;
 
 	}
 

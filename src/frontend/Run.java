@@ -14,6 +14,7 @@ import java.util.Map;
 import persistence.DatabaseConnector;
 import backend.Category;
 import backend.CategoryManager;
+import backend.CommandManager;
 import backend.Crypt;
 import backend.LoginManager;
 import backend.Offer;
@@ -27,6 +28,7 @@ public class Run {
 	static LoginManager loginManager;
 	static OfferManager offerManager;
 	static CategoryManager categoryManager;
+	
 
 	public static void main(String[] args) {
 		DatabaseConnector databaseConnector = null;
@@ -41,7 +43,8 @@ public class Run {
 		loginManager = new LoginManager(databaseConnector);
 		offerManager = new OfferManager(databaseConnector);
 		categoryManager = new CategoryManager(databaseConnector);
-		System.out.println("Login Manager Demo");
+		CommandManager commandManager=new CommandManager(loginManager, offerManager, categoryManager);
+		System.out.println("Uni Kleinanzeigen");
 		System.out.println("Please Enter your username:");
 		br = new BufferedReader(new InputStreamReader(System.in));
 		String username = "";
@@ -78,195 +81,19 @@ public class Run {
 
 			String command = "";
 			while (!command.equals("exit")) {
+				
 				try {
 					command = br.readLine();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if (command.equals("help")) {
-					printCommands();
-				}
-				if (command.equals("list")) {
-					listOffers();
-				}
-				if (command.equals("search")) {
-					searchOffers(user);
-				}
-				if (command.equals("show")) {
-					showOffer(user);
-				}
-				if (command.equals("add")) {
-					addOffer(user);
-				}
-				if (command.equals("last")) {
-					showLastOffers(user);
-				}
-				if (command.equals("categories")) {
-					printCategories();
-				}
+				commandManager.execute(command,user);
 				if (!command.equals("exit"))
 					System.out.println("Enter Command:");
 			}
 		}
 
-	}
-
-	private static void printCategories() {
-		for (Map.Entry<Integer, Category> category : categoryManager
-				.getCategories().entrySet()) {
-			System.out.println(category.getKey() + "\t"
-					+ category.getValue().getName() + "\t"
-					+ category.getValue().getDescription());
-		}
-
-	}
-
-	public static void printCommands() {
-		System.out.println("Available Commands:");
-		System.out.println("help\t Print help");
-		System.out.println("list\t Prints all available Offers");
-		System.out
-				.println("search\t Searches in all offers and prints the result");
-		System.out
-				.println("show\t Prints a specific offer with address and telefon of Offercreator");
-		System.out
-		.println("edit\t Edits a specific offer with address and telefon of Offercreator");
-		System.out.println("add\t Adds a offer");
-		System.out
-				.println("suggest\t Suggests you Offers based on your searched and visited");
-		System.out.println("last\t Lists the Offers you visited last");
-		System.out.println("categories\t Prints all categories");
-		System.out.println("exit\t Exits the programm");
-	}
-
-	public static void listOffers() {
-		for (Map.Entry<String, Offer> offer : offerManager.getOffers()
-				.entrySet()) {
-			printSmallOffer(offer.getValue());
-		}
-	}
-
-	public static void searchOffers(User user) {
-		System.out.println("Offer Search enter the searchstring:");
-		String haystack = "";
-		try {
-			haystack = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		boolean entered=false;
-		Integer category = 0;
-		while(!entered){
-			printCategories();
-			System.out.println("0\tAll\tFür alle Kategorien");
-			System.out.println("Enter the Category:");
-			try {
-				category = Integer.parseInt(br.readLine());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if(categoryManager.getCategories().containsKey(category)||category==0)
-				entered=true;
-			else {
-				System.out.println("Please Enter valid Category");
-			}
-		}
-		
-		Map<String, Offer> results=offerManager.searchOffers(haystack,category);
-		for (Map.Entry<String, Offer> offer :results.entrySet()) {
-			printSmallOffer(offer.getValue());
-		}
-		if(results.size()==0){
-			System.out.println("No Offers found");
-		}
-		loginManager.searchOffers(user, haystack);
-	}
-
-	public static void showLastOffers(User user) {
-		for (Integer offer : user.getVisitedOffers()) {
-			printSmallOffer(offerManager.getOfferById(offer));
-		}
-	}
-
-	public static void printOffer(Offer offer) {
-		User user = loginManager.getUserFromID(offer.getUserId());
-		System.out.println("Offer: " + offer.getName() + " : " + offer.getTimeString()+
-				" id: "+Integer.toString(offer.getId())+ "\n"+categoryManager.getCategories().get(offer.getCategoryID())+"\n"
-				+ offer.getDescription());
-		System.out.println(user.getFirstName() + " " + user.getLastName()
-				+ "\nAddr:" + user.getAddress() + "\nTel:" + user.getTelefon()
-				+ "\n");
-
-	}
-	
-	public static void printSmallOffer(Offer offer){
-		System.out.println("Offer: " + offer.getName() + " : " + offer.getTimeString()+
-				" id: "+Integer.toString(offer.getId())+ "\n"+categoryManager.getCategories().get(offer.getCategoryID())+"\n"
-				+ offer.getDescription());
-	}
-
-	public static void showOffer(User user) {
-		System.out.println("Please enter OfferId:");
-		Integer OfferId = 0;
-		try {
-			String input = br.readLine();
-			OfferId = Integer.parseInt(input);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		Offer offer = offerManager.getOfferById(OfferId);
-		if (offer == null) {
-			System.out.println("This ID does not exist\n");
-		} else {
-			loginManager.visitOffer(user, offer);
-			printOffer(offer);
-		}
-	}
-
-	public static void addOffer(User user) {
-		System.out.println("Offer Creation enter the offer name:");
-		String name = "";
-		try {
-			name = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Enter the Description:");
-		String description = "";
-		try {
-			description = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		boolean entered = false;
-		Integer category = 0;
-		while (!entered) {
-			printCategories();
-			System.out.println("Enter the Category:");
-			try {
-				category = Integer.parseInt(br.readLine());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if (categoryManager.getCategories().containsKey(category))
-				entered = true;
-			else {
-				System.out.println("Please Enter valid Category");
-			}
-		}
-		try {
-			offerManager.addOffer(new Offer(name, description, user.getId(),
-					new Date(new java.util.Date().getTime()), 0, category));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public static User registerUser(String username) {

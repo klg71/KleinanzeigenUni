@@ -51,6 +51,10 @@ public class DeleteOfferCommand extends Command {
 			}
 
 		}
+		if(offer.getUserId()!=currentUser.getId()){
+			System.out.println("You cant delete this!");
+			return;
+		}
 		offerManager.deleteOffer(offer);
 
 	}

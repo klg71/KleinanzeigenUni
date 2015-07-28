@@ -57,11 +57,29 @@ public class OfferManager {
 			
 			return retMap;
 		}
-		// return (HashMap<String, Offer>)
-		// offers.entrySet().parallelStream().filter(entry->entry.getKey().contains(haystack)).collect(Collectors.toMap(entry->entry.getKey(),entry->entry.getValue()
-		// ));
 	}
-
+	
+	public void disableOffer(Offer offer){
+		offer.setAvailable(false);
+		try {
+			databaseConnector.editOffer(offer);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void enableOffer(Offer offer){
+		offer.setAvailable(true);
+		try {
+			databaseConnector.editOffer(offer);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public Offer getOfferById(Integer offerId) {
 		for (Map.Entry<String, Offer> entry : offers.entrySet()) {
 			if (entry.getValue().getId() == offerId) {
@@ -69,6 +87,25 @@ public class OfferManager {
 			}
 		}
 		return null;
+	}
+	
+	public void editOffer(Offer editedOffer){
+		try {
+			databaseConnector.editOffer(editedOffer);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteOffer(Offer deletedOffer){
+		offers.remove(deletedOffer);
+		try {
+			databaseConnector.deleteOffer(deletedOffer);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public HashMap<String, Offer> suggestOffers(User user) {
