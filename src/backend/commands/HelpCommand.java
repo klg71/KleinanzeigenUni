@@ -6,12 +6,13 @@ import backend.CategoryManager;
 import backend.Command;
 import backend.LoginManager;
 import backend.OfferManager;
+import backend.User;
 
 public class HelpCommand extends Command {
 
-	public HelpCommand(int numberParameters, LoginManager loginManager, OfferManager offerManager,
+	public HelpCommand(LoginManager loginManager, OfferManager offerManager,
 			CategoryManager categoryManager) {
-		super(numberParameters, loginManager, offerManager, categoryManager);
+		super(loginManager, offerManager, categoryManager);
 		keywords.add("help");
 		keywords.add("Help");
 		keywords.add("HELP");
