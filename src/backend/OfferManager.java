@@ -31,12 +31,14 @@ public class OfferManager {
 		return offers;
 	}
 
-	public void addOffer(Offer newOffer) throws Exception {
+	public Offer addOffer(Offer newOffer) throws Exception {
+		Offer offer= databaseConnector.addOffer(newOffer);
 		if (!offers.containsKey(newOffer.getName())) {
-			offers.put(newOffer.getName(), databaseConnector.addOffer(newOffer));
+			offers.put(newOffer.getName(),offer);
 		} else {
 			throw new Exception("Offer Creation failed: Offername exists");
 		}
+		return offer;
 	}
 
 	public HashMap<String, Offer> searchOffers(String haystack, Integer category) {

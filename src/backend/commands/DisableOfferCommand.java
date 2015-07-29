@@ -45,6 +45,7 @@ public class DisableOfferCommand extends Command {
 			return;
 		}
 		offerManager.disableOffer(offer);
+		System.out.println("Disabled Offer: "+offer.getId());
 		
 
 	}
