@@ -80,6 +80,7 @@ public class Run {
 			System.out.println("\nEnter Command:");
 
 			String command = "";
+			offerManager.checkOffers();
 			while (!command.equals("exit")) {
 				
 				try {
@@ -92,6 +93,7 @@ public class Run {
 					commandManager.execute(command,user);
 					System.out.println("Enter Command:");
 				}
+				offerManager.checkOffers();
 			}
 		}
 

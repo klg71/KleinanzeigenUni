@@ -1,5 +1,6 @@
 package backend;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +40,18 @@ public class OfferManager {
 			throw new Exception("Offer Creation failed: Offername exists");
 		}
 		return offer;
+	}
+	
+	public void checkOffers(){
+		for(Map.Entry<String, Offer> entry : offers.entrySet()){
+			if(!entry.getValue().isAvailable()){
+				java.util.Date d=new java.util.Date();
+				d.setHours(d.getHours()-2);
+				if(entry.getValue().getTime().getTime()<d.getTime()){
+					deleteOffer(entry.getValue());
+				}
+			}
+		}
 	}
 
 	public HashMap<String, Offer> searchOffers(String haystack, Integer category) {
