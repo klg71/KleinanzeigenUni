@@ -14,7 +14,9 @@ public class AddOfferCommand extends Command {
 
 	public AddOfferCommand(LoginManager loginManager, OfferManager offerManager, CategoryManager categoryManager) {
 		super(loginManager, offerManager, categoryManager);
-		// TODO Auto-generated constructor stub
+		keywords.add("add");
+		keywords.add("Add");
+		keywords.add("ADD");
 	}
 
 	@Override
