@@ -23,12 +23,10 @@ import backend.User;
 
 public class Run {
 
-	static BufferedReader br = new BufferedReader(new InputStreamReader(
-			System.in));
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static LoginManager loginManager;
 	static OfferManager offerManager;
 	static CategoryManager categoryManager;
-	
 
 	public static void main(String[] args) {
 		DatabaseConnector databaseConnector = null;
@@ -43,7 +41,7 @@ public class Run {
 		loginManager = new LoginManager(databaseConnector);
 		offerManager = new OfferManager(databaseConnector);
 		categoryManager = new CategoryManager(databaseConnector);
-		CommandManager commandManager=new CommandManager(loginManager, offerManager, categoryManager);
+		CommandManager commandManager = new CommandManager(loginManager, offerManager, categoryManager);
 		System.out.println("Uni Kleinanzeigen");
 		System.out.println("Please Enter your username:");
 		br = new BufferedReader(new InputStreamReader(System.in));
@@ -55,42 +53,55 @@ public class Run {
 			e.printStackTrace();
 		}
 		if (loginManager.containsUser(username)) {
-			System.out.println("Please Enter your password:");
 			String password = "";
-			try {
-				password = br.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			if ((user = loginManager.loginUser(username,
-					Crypt.getSHA1(password))) != null) {
-				System.out.println("Login successful");
+			int attempts = 0;
+			do {
+				if (attempts > 0) {
+					System.out.println("Login unsuccessful\nPlease try again");
+				}
+				System.out.println("Please Enter your password:");
+				try {
+					password = br.readLine();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				attempts++;
+			} while ((user = loginManager.loginUser(username, Crypt.getSHA1(password))) == null && attempts < 3);
+			if (attempts == 3) {
+				System.out.println("Login Attempts Exceeded!\nProgram Terminated!");
+				return;
 			} else {
-				System.out.println("Login unsuccessful");
+				if (user.isLoggedIn()) {
+					System.out.println("Login successful");
+				}
+
 			}
-		} else {
+		} else
+
+		{
 			user = registerUser(username);
-			user=loginManager.loginUser(username,user.getPasswordHash());
+			user = loginManager.loginUser(username, user.getPasswordHash());
 
 		}
-		if (user.isLoggedIn()) {
+		if (user.isLoggedIn())
+
+		{
 			System.out.println("\nShow All Commands with command: help");
 			System.out.println("\nEnter Command:");
 
 			String command = "";
 			offerManager.checkOffers();
 			while (!command.equals("exit")) {
-				
+
 				try {
 					command = br.readLine();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if (!command.equals("exit")){
-					commandManager.execute(command,user);
+				if (!command.equals("exit")) {
+					commandManager.execute(command, user);
 					System.out.println("Enter Command:");
 				}
 				offerManager.checkOffers();
@@ -142,8 +153,7 @@ public class Run {
 		}
 		User user = null;
 		try {
-			user = loginManager.registerUser(username, password, firstname,
-					lastname, telefon, address);
+			user = loginManager.registerUser(username, password, firstname, lastname, telefon, address);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
