@@ -43,14 +43,18 @@ public class OfferManager {
 	}
 	
 	public void checkOffers(){
+		ArrayList<Offer>deletedOffers=new ArrayList<Offer>();
 		for(Map.Entry<String, Offer> entry : offers.entrySet()){
 			if(!entry.getValue().isAvailable()){
 				java.util.Date d=new java.util.Date();
 				d.setHours(d.getHours()-2);
 				if(entry.getValue().getTime().getTime()<d.getTime()){
-					deleteOffer(entry.getValue());
+					deletedOffers.add(entry.getValue());
 				}
 			}
+		}
+		for(Offer offer:deletedOffers){
+			deleteOffer(offer);
 		}
 	}
 
