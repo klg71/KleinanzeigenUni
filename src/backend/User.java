@@ -118,5 +118,10 @@ public class User {
 	public void addSearch(String search){
 		searches.add(search);
 	}
+
+	public void logout() {
+		loggedIn=false;
+		
+	}
 	
 }

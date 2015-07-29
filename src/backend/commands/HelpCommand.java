@@ -35,6 +35,7 @@ public class HelpCommand extends Command {
 				.println("suggest\t Suggests you Offers based on your searched and visited");
 		System.out.println("last\t Lists the Offers you visited last");
 		System.out.println("categories\t Prints all categories");
+		System.out.println("logout\t User Logout");
 		System.out.println("exit\t Exits the programm");
 	}
 

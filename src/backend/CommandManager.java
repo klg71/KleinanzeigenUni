@@ -13,6 +13,7 @@ import backend.commands.EnableOfferCommand;
 import backend.commands.HelpCommand;
 import backend.commands.LastOfferCommand;
 import backend.commands.ListOffersCommand;
+import backend.commands.LogoutCommand;
 import backend.commands.SearchOfferCommand;
 import backend.commands.ShowCategoriesCommand;
 import backend.commands.ShowOfferCommand;
@@ -41,6 +42,7 @@ public class CommandManager {
 		commands.add(new EditOfferCommand(loginManager, offerManager, categoryManager));
 		commands.add(new DeleteOfferCommand(loginManager, offerManager, categoryManager));
 		commands.add(new ShowCategoriesCommand(loginManager, offerManager, categoryManager));
+		commands.add(new LogoutCommand(loginManager, offerManager, categoryManager));
 	}
 	public void execute(String input,User currentUser){
 
