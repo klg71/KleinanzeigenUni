@@ -162,6 +162,7 @@ public class EditOfferCommand extends Command {
 			offer.setDescription(description);
 			offer.setCategoryID(category);
 			offerManager.editOffer(offer);
+			System.out.println("Edited Offer: "+offer.getId());
 
 	}
 
