@@ -26,6 +26,9 @@ public class ListOffersCommand extends Command {
 				.entrySet()) {
 			printSmallOffer(offer.getValue());
 		}
+		if(offerManager.getOffers().size()==0){
+			System.out.println("No Offers found!");
+		}
 
 	}
 

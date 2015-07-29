@@ -84,6 +84,7 @@ public class AddOfferCommand extends Command {
 		offer=new Offer(name, description, currentUser.getId(), new Date(new java.util.Date().getTime()), 0, category, 1);
 		try {
 			offerManager.addOffer(offer);
+			System.out.println("Added Offer ID: "+offer.getId());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

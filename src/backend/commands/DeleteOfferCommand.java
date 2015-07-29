@@ -56,6 +56,7 @@ public class DeleteOfferCommand extends Command {
 			return;
 		}
 		offerManager.deleteOffer(offer);
+		System.out.println("Offer: "+offer.getId()+" deleted!");
 
 	}
 

@@ -88,9 +88,10 @@ public class Run {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				commandManager.execute(command,user);
-				if (!command.equals("exit"))
+				if (!command.equals("exit")){
+					commandManager.execute(command,user);
 					System.out.println("Enter Command:");
+				}
 			}
 		}
 

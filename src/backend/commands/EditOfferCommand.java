@@ -37,6 +37,10 @@ public class EditOfferCommand extends Command {
 				}
 				if(offerManager.getOfferById(OfferId)!=null){
 					offer=offerManager.getOfferById(OfferId);
+					if(offer.getUserId()!=currentUser.getId()){
+						System.out.println("You cant edit this!");
+						return;
+					}
 				}
 				else {
 					System.out.println("No Offer found");
@@ -50,6 +54,10 @@ public class EditOfferCommand extends Command {
 				}
 				if(offerManager.getOfferById(OfferId)!=null){
 					offer=offerManager.getOfferById(OfferId);
+					if(offer.getUserId()!=currentUser.getId()){
+						System.out.println("You cant edit this!");
+						return;
+					}
 				}
 				else {
 					System.out.println("No Offer found");
@@ -70,6 +78,10 @@ public class EditOfferCommand extends Command {
 				}
 				if(offerManager.getOfferById(OfferId)!=null){
 					offer=offerManager.getOfferById(OfferId);
+					if(offer.getUserId()!=currentUser.getId()){
+						System.out.println("You cant edit this!");
+						return;
+					}
 				}
 				else {
 					System.out.println("No Offer found");
@@ -91,6 +103,10 @@ public class EditOfferCommand extends Command {
 				}
 				if(offerManager.getOfferById(OfferId)!=null){
 					offer=offerManager.getOfferById(OfferId);
+					if(offer.getUserId()!=currentUser.getId()){
+						System.out.println("You cant edit this!");
+						return;
+					}
 				}
 				else {
 					System.out.println("No Offer found");
@@ -124,6 +140,10 @@ public class EditOfferCommand extends Command {
 				}
 				if(offerManager.getOfferById(OfferId)!=null){
 					offer=offerManager.getOfferById(OfferId);
+					if(offer.getUserId()!=currentUser.getId()){
+						System.out.println("You cant edit this!");
+						return;
+					}
 				}
 				else {
 					System.out.println("No Offer found");
