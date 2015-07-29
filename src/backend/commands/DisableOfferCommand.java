@@ -40,6 +40,10 @@ public class DisableOfferCommand extends Command {
 			System.out.println("This ID does not exist\n");
 			return;
 		}
+		if(!offer.isAvailable()){
+			System.out.println("Already Disabled!");
+			return;
+		}
 		if(currentUser.getId()!=offer.getUserId()){
 			System.out.println("You cant edit this!");
 			return;
