@@ -83,5 +83,6 @@ public class LoginManager {
 	public boolean containsUser(String username){
 		return users.containsKey(username);
 	}
+
 	
 }

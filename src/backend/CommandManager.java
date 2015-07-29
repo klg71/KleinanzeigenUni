@@ -5,10 +5,17 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import backend.commands.AddOfferCommand;
+import backend.commands.DeleteOfferCommand;
+import backend.commands.DisableOfferCommand;
+import backend.commands.EditOfferCommand;
+import backend.commands.EnableOfferCommand;
 import backend.commands.HelpCommand;
+import backend.commands.LastOfferCommand;
 import backend.commands.ListOffersCommand;
 import backend.commands.SearchOfferCommand;
 import backend.commands.ShowOfferCommand;
+import backend.commands.SuggestOffersCommand;
 
 public class CommandManager {
 	private ArrayList<Command> commands;
@@ -25,6 +32,13 @@ public class CommandManager {
 		commands.add(new ListOffersCommand(loginManager, offerManager, categoryManager));
 		commands.add(new SearchOfferCommand(loginManager, offerManager, categoryManager));
 		commands.add(new ShowOfferCommand(loginManager, offerManager, categoryManager));
+		commands.add(new LastOfferCommand(loginManager, offerManager, categoryManager));
+		commands.add(new AddOfferCommand(loginManager, offerManager, categoryManager));
+		commands.add(new EnableOfferCommand(loginManager, offerManager, categoryManager));
+		commands.add(new DisableOfferCommand(loginManager, offerManager, categoryManager));
+		commands.add(new SuggestOffersCommand(loginManager, offerManager, categoryManager));
+		commands.add(new EditOfferCommand(loginManager, offerManager, categoryManager));
+		commands.add(new DeleteOfferCommand(loginManager, offerManager, categoryManager));
 	}
 	public void execute(String input,User currentUser){
 

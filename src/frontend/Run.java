@@ -72,7 +72,7 @@ public class Run {
 			}
 		} else {
 			user = registerUser(username);
-			loginManager.loginUser(username,user.getPasswordHash());
+			user=loginManager.loginUser(username,user.getPasswordHash());
 
 		}
 		if (user.isLoggedIn()) {
