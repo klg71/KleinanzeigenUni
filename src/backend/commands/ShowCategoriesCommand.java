@@ -22,7 +22,7 @@ public class ShowCategoriesCommand extends Command {
 	@Override
 	public void execute(ArrayList<String> parameters) {
 		for(Map.Entry<Integer,Category> category:categoryManager.getCategories().entrySet()){
-			System.out.println(category.getKey()+"\t"+category.getValue());
+			System.out.println(category.getKey()+"\t"+category.getValue().getName());
 		}
 
 	}
