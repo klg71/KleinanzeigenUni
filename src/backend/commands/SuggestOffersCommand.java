@@ -20,7 +20,7 @@ public class SuggestOffersCommand extends Command {
 
 	@Override
 	public void execute(ArrayList<String> parameters) {
-		for (Map.Entry<String, Offer> offer : offerManager.suggestOffers(currentUser)
+		for (Map.Entry<Integer, Offer> offer : offerManager.suggestOffers(currentUser)
 				.entrySet()) {
 			printSmallOffer(offer.getValue());
 		}

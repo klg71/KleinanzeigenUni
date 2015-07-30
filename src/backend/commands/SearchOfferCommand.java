@@ -64,8 +64,8 @@ public class SearchOfferCommand extends Command {
 			category = Integer.parseInt(parameters.get(1));
 		}
 
-		Map<String, Offer> results = offerManager.searchOffers(haystack, category);
-		for (Map.Entry<String, Offer> offer : results.entrySet()) {
+		Map<Integer, Offer> results = offerManager.searchOffers(haystack, category);
+		for (Map.Entry<Integer, Offer> offer : results.entrySet()) {
 			printSmallOffer(offer.getValue());
 		}
 		if (results.size() == 0) {

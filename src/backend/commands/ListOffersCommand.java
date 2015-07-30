@@ -22,7 +22,7 @@ public class ListOffersCommand extends Command {
 
 	@Override
 	public void execute(ArrayList<String> parameters) {
-		for (Map.Entry<String, Offer> offer : offerManager.getOffers()
+		for (Map.Entry<Integer, Offer> offer : offerManager.getOffers()
 				.entrySet()) {
 			printSmallOffer(offer.getValue());
 		}

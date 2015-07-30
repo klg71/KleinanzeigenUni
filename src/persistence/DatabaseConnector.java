@@ -159,7 +159,7 @@ public class DatabaseConnector {
 		connection.close();
 	}
 
-	public HashMap<String, Offer> loadOffers() throws SQLException {
+	public HashMap<Integer, Offer> loadOffers() throws SQLException {
 		Connection connection = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -168,7 +168,7 @@ public class DatabaseConnector {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
-		HashMap<String, Offer> offers = new HashMap<String, Offer>();
+		HashMap<Integer, Offer> offers = new HashMap<Integer, Offer>();
 		Statement statement = connection.createStatement();
 		String sql = "select * from Offers";
 		ResultSet resultSet = statement.executeQuery(sql);
@@ -182,7 +182,7 @@ public class DatabaseConnector {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			offers.put(offer.getName(), offer);
+			offers.put(offer.getId(), offer);
 		}
 		connection.close();
 		return offers;

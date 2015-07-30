@@ -50,7 +50,7 @@ public class EditOfferCommand extends Command {
 				
 			case 1:
 				if (parameters.size()==1){
-					OfferId= Integer.parseInt(parameters.get(1));
+					OfferId= Integer.parseInt(parameters.get(0));
 				}
 				if(offerManager.getOfferById(OfferId)!=null){
 					offer=offerManager.getOfferById(OfferId);
@@ -88,7 +88,7 @@ public class EditOfferCommand extends Command {
 					return;
 				}
 				
-				System.out.println("Enter new description("+offer.getName()+"):");
+				System.out.println("Enter new description("+offer.getDescription()+"):");
 				try {
 					description = br.readLine();
 				} catch (IOException e) {
@@ -158,10 +158,11 @@ public class EditOfferCommand extends Command {
 				System.out.println("You cant edit this!");
 				return;
 			}
+			String oldname=offer.getName();
 			offer.setName(name);
 			offer.setDescription(description);
 			offer.setCategoryID(category);
-			offerManager.editOffer(offer);
+			offerManager.editOffer(oldname,offer);
 			System.out.println("Edited Offer: "+offer.getId());
 
 	}
