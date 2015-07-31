@@ -109,7 +109,7 @@ public class OfferManager {
 	}
 	
 	public void editOffer(String oldname, Offer editedOffer){
-		offers.replace(editedOffer.getId(),editedOffer);
+		offers.put(editedOffer.getId(),editedOffer);
 		try {
 			databaseConnector.editOffer(editedOffer);
 		} catch (SQLException e) {
