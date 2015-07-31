@@ -1,8 +1,6 @@
 package persistence;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,10 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Scanner;
-
 import backend.Category;
 import backend.LoginManager;
 import backend.Offer;
@@ -206,7 +200,6 @@ public class DatabaseConnector {
 
 		while (resultSet.next()) {
 			try {
-				http: // marketplace.eclipse.org/marketplace-client-intro?mpc_install=90
 				visits.add(resultSet.getInt("OfferId"));
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
