@@ -6,7 +6,6 @@ import backend.CategoryManager;
 import backend.Command;
 import backend.LoginManager;
 import backend.OfferManager;
-import backend.User;
 
 public class HelpCommand extends Command {
 

@@ -1,6 +1,5 @@
 package backend;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,8 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
-
 import persistence.DatabaseConnector;
 
 public class OfferManager {
@@ -129,30 +126,31 @@ public class OfferManager {
 	}
 
 	public HashMap<Integer, Offer> suggestOffers(User user) {
+		ArrayList<Offer> allOffers=new ArrayList<Offer>();
 		// Endgültiges Ergebnis
 		HashMap<Integer, Offer> returnMap = new HashMap<Integer, Offer>();
-		// Alle relevanten Angebote
-		HashMap<Integer, Offer> fullMap = new HashMap<Integer, Offer>();
 
 		// Füge besuchten zur Liste hinzu
 		for (Integer offer : user.getVisitedOffers()) {
-			fullMap.put(getOfferById(offer).getId(), getOfferById(offer));
+			allOffers.add(getOfferById(offer));
 		}
 		// Füge alle aus Suchen hinzu
 		for (String search : user.getSearches()) {
-			fullMap.putAll(searchOffers(search,0));
+			for(Map.Entry<Integer, Offer> entry:searchOffers(search,0).entrySet()){
+				allOffers.add(entry.getValue());
+			}
 		}
 
 		// Generiere geordnete Liste
 		HashMap<Offer, Integer> orderedMap = new HashMap<Offer, Integer>();
 
 		// Gehe durch alle Elemente durch
-		for (Map.Entry<Integer, Offer> entry : fullMap.entrySet()) {
-			if (orderedMap.containsKey(entry.getValue())) {
-				orderedMap.put(entry.getValue(),
-						orderedMap.get(entry.getValue()) + 1);
+		for (Offer entry : allOffers) {
+			if (orderedMap.containsKey(entry)) {
+				orderedMap.put(entry,
+						orderedMap.get(entry) + 1);
 			} else {
-				orderedMap.put(entry.getValue(), 1);
+				orderedMap.put(entry, 1);
 			}
 		}
 

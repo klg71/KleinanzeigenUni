@@ -1,8 +1,6 @@
 package backend.commands;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -11,7 +9,6 @@ import backend.Command;
 import backend.LoginManager;
 import backend.Offer;
 import backend.OfferManager;
-import backend.User;
 
 public class SearchOfferCommand extends Command {
 

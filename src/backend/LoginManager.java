@@ -7,10 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import persistence.DatabaseConnector;
-import persistence.FileConnector;
 
 public class LoginManager {
-	private FileConnector fileConnector;
 	private DatabaseConnector databaseConnector;
 	private HashMap<String,User> users;
 	

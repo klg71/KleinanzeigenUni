@@ -3,21 +3,12 @@ package frontend;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import persistence.DatabaseConnector;
-import backend.Category;
 import backend.CategoryManager;
 import backend.CommandManager;
 import backend.Crypt;
 import backend.LoginManager;
-import backend.Offer;
 import backend.OfferManager;
 import backend.User;
 

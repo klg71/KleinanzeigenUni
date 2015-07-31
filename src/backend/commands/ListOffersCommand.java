@@ -8,7 +8,6 @@ import backend.Command;
 import backend.LoginManager;
 import backend.Offer;
 import backend.OfferManager;
-import backend.User;
 
 public class ListOffersCommand extends Command {
 
