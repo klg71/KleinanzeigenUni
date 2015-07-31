@@ -14,10 +14,10 @@ public class User {
 	private boolean loggedIn;
 	
 	private ArrayList<Integer> visitedOffers;
-	private ArrayList<String> searches;
+	private ArrayList<Search> searches;
 	
 	
-	public void setSearches(ArrayList<String> searches) {
+	public void setSearches(ArrayList<Search> searches) {
 		this.searches = searches;
 	}
 
@@ -33,10 +33,10 @@ public class User {
 		this.id = id;
 		this.loggedIn=false;
 		visitedOffers=new ArrayList<Integer>();
-		searches=new ArrayList<String>();
+		searches=new ArrayList<Search>();
 	}
 	
-	public ArrayList<String> getSearches() {
+	public ArrayList<Search> getSearches() {
 		return searches;
 	}
 
@@ -114,7 +114,7 @@ public class User {
 	public void addVisit(Integer offerId){
 		visitedOffers.add(offerId);
 	}	
-	public void addSearch(String search){
+	public void addSearch(Search search){
 		searches.add(search);
 	}
 

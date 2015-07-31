@@ -9,9 +9,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import backend.Category;
 import backend.LoginManager;
 import backend.Offer;
+import backend.Search;
 import backend.User;
 
 public class DatabaseConnector {
@@ -249,7 +251,7 @@ public class DatabaseConnector {
 	}
 
 	public void loadSearches(User user) throws SQLException {
-		ArrayList<String> searches = new ArrayList<String>();
+		ArrayList<Search> searches = new ArrayList<Search>();
 
 		Connection connection = null;
 		try {
@@ -265,7 +267,7 @@ public class DatabaseConnector {
 
 		while (resultSet.next()) {
 			try {
-				searches.add(resultSet.getString("Search"));
+				searches.add(new Search(resultSet.getString("Search"),resultSet.getInt("Category")));
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

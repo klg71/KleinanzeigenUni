@@ -135,8 +135,8 @@ public class OfferManager {
 			allOffers.add(getOfferById(offer));
 		}
 		// Füge alle aus Suchen hinzu
-		for (String search : user.getSearches()) {
-			for(Map.Entry<Integer, Offer> entry:searchOffers(search,0).entrySet()){
+		for (Search search : user.getSearches()) {
+			for(Map.Entry<Integer, Offer> entry:searchOffers(search.getSearchString(),search.getCategory()).entrySet()){
 				allOffers.add(entry.getValue());
 			}
 		}
