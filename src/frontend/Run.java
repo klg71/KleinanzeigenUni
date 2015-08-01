@@ -25,7 +25,7 @@ public class Run {
 		User user = null;
 
 		try {
-			databaseConnector = new DatabaseConnector("data.db", loginManager);
+			databaseConnector = new DatabaseConnector("data.db");
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

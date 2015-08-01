@@ -18,11 +18,9 @@ import backend.User;
 
 public class DatabaseConnector {
 	private String filename;
-	private LoginManager loginManager;
 
-	public DatabaseConnector(String filename, LoginManager loginManager) throws SQLException {
+	public DatabaseConnector(String filename) throws SQLException {
 		this.filename = filename;
-		this.loginManager = loginManager;
 	}
 
 	public User addUser(User newUser) throws IOException, SQLException {
