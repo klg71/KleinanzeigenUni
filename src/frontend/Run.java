@@ -19,6 +19,7 @@ public class Run {
 	static LoginManager loginManager;
 	static OfferManager offerManager;
 	static CategoryManager categoryManager;
+	static CommandManager commandManager;
 
 	public static void main(String[] args) {
 		DatabaseConnector databaseConnector = null;
@@ -33,7 +34,7 @@ public class Run {
 		loginManager = new LoginManager(databaseConnector);
 		offerManager = new OfferManager(databaseConnector);
 		categoryManager = new CategoryManager(databaseConnector);
-		CommandManager commandManager = new CommandManager(loginManager,
+		commandManager = new CommandManager(loginManager,
 				offerManager, categoryManager);
 		System.out.println("Uni Kleinanzeigen");
 		user = loginUser();
