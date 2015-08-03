@@ -116,7 +116,7 @@ public class OfferManager {
 	}
 	
 	public void deleteOffer(Offer deletedOffer){
-		offers.remove(deletedOffer.getName());
+		offers.remove(deletedOffer.getId());
 		try {
 			databaseConnector.deleteOffer(deletedOffer);
 		} catch (SQLException e) {
