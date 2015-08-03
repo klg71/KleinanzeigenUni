@@ -139,7 +139,7 @@ public class OfferManager {
 		// Füge alle aus Suchen hinzu
 		for (Search search : user.getSearches()) {
 			for (Map.Entry<Integer, Offer> entry : searchOffers(
-					search.getSearchString(), search.getCategory()).entrySet()) {
+					search.getSearchString(), 0).entrySet()) {
 				allOffers.add(entry.getValue());
 			}
 		}
