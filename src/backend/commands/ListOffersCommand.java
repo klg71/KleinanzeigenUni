@@ -23,7 +23,9 @@ public class ListOffersCommand extends Command {
 	public void execute(ArrayList<String> parameters) {
 		for (Map.Entry<Integer, Offer> offer : offerManager.getOffers()
 				.entrySet()) {
-			printSmallOffer(offer.getValue());
+			if(offer!=null){
+				printSmallOffer(offer.getValue());
+			}
 		}
 		if(offerManager.getOffers().size()==0){
 			System.out.println("No Offers found!");
