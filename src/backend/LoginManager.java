@@ -82,5 +82,10 @@ public class LoginManager {
 		return users.containsKey(username);
 	}
 
+	public HashMap<String, User> getUsers() {
+		// TODO Auto-generated method stub
+		return users;
+	}
+
 	
 }

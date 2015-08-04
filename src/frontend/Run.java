@@ -32,7 +32,7 @@ public class Run {
 			e1.printStackTrace();
 		}
 		loginManager = new LoginManager(databaseConnector);
-		offerManager = new OfferManager(databaseConnector);
+		offerManager = new OfferManager(databaseConnector,loginManager);
 		categoryManager = new CategoryManager(databaseConnector);
 		commandManager = new CommandManager(loginManager, offerManager,
 				categoryManager);
@@ -47,7 +47,7 @@ public class Run {
 			System.out.println("\nShow All Commands with command: help");
 
 			String command = "";
-			offerManager.checkOffers();
+			//offerManager.checkOffers();
 			while (!command.equals("exit")) {
 				if (!user.isLoggedIn()) {
 					user = loginUser();

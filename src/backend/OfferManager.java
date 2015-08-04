@@ -14,9 +14,11 @@ import persistence.DatabaseConnector;
 public class OfferManager {
 	private HashMap<Integer, Offer> offers;
 	private DatabaseConnector databaseConnector;
+	private LoginManager loginManager;
 
-	public OfferManager(DatabaseConnector databaseConnector) {
+	public OfferManager(DatabaseConnector databaseConnector, LoginManager loginManager) {
 		this.databaseConnector = databaseConnector;
+		this.loginManager = loginManager;
 		try {
 			offers = databaseConnector.loadOffers();
 		} catch (SQLException e) {
@@ -32,7 +34,7 @@ public class OfferManager {
 	public Offer addOffer(Offer newOffer) throws Exception {
 		Offer offer = databaseConnector.addOffer(newOffer);
 		if (!offers.containsKey(newOffer.getName())) {
-			offers.put(newOffer.getId(), offer);
+			offers.put(offer.getId(), offer);
 		} else {
 			throw new Exception("Offer Creation failed: Offername exists");
 		}
@@ -55,8 +57,7 @@ public class OfferManager {
 		}
 	}
 
-	public HashMap<Integer, Offer> searchOffers(String haystack,
-			Integer category) {
+	public HashMap<Integer, Offer> searchOffers(String haystack, Integer category) {
 		HashMap<Integer, Offer> retMap = new HashMap<Integer, Offer>();
 		if (category == 0) {
 			for (Map.Entry<Integer, Offer> entry : offers.entrySet()) {
@@ -67,8 +68,7 @@ public class OfferManager {
 			return retMap;
 		} else {
 			for (Map.Entry<Integer, Offer> entry : offers.entrySet()) {
-				if (entry.getValue().getName().contains(haystack)
-						&& entry.getValue().getCategoryID() == category) {
+				if (entry.getValue().getName().contains(haystack) && entry.getValue().getCategoryID() == category) {
 					retMap.put(entry.getKey(), entry.getValue());
 				}
 			}
@@ -129,26 +129,38 @@ public class OfferManager {
 
 	public HashMap<Integer, Offer> suggestOffers(User user) {
 		ArrayList<Offer> allOffers = new ArrayList<Offer>();
+		ArrayList<Offer> suggestOffers = new ArrayList<Offer>();
 		// Endgültiges Ergebnis
 		HashMap<Integer, Offer> returnMap = new HashMap<Integer, Offer>();
 
 		// Füge besuchten zur Liste hinzu
 		for (Integer offer : user.getVisitedOffers()) {
-			allOffers.add(getOfferById(offer));
-		}
-		// Füge alle aus Suchen hinzu
-		for (Search search : user.getSearches()) {
-			for (Map.Entry<Integer, Offer> entry : searchOffers(
-					search.getSearchString(), 0).entrySet()) {
-				allOffers.add(entry.getValue());
+			Offer offerByID=getOfferById(offer);
+			if(offer!=null){
+				allOffers.add(offerByID);
 			}
 		}
+		for(int i=0;i<10&&i<(allOffers.size()-10);i++){
+			allOffers.remove(i);
+		}
+		for(Map.Entry<String,User> entry:loginManager.getUsers().entrySet()){
+			for(Offer offer:allOffers){
+				if(entry.getValue().containsOffer(offer)){
+					for(Integer offerID:entry.getValue().getVisitedOffers()){
+						if(offerID!=offer.getId()){
+							suggestOffers.add(getOfferById(offerID));
+						}
+					}
+				}
+			}
+		}
+		
 
 		// Generiere geordnete Liste
 		HashMap<Offer, Integer> orderedMap = new HashMap<Offer, Integer>();
 
 		// Gehe durch alle Elemente durch
-		for (Offer entry : allOffers) {
+		for (Offer entry : suggestOffers) {
 			if (entry != null) {
 				if (orderedMap.containsKey(entry)) {
 					orderedMap.put(entry, orderedMap.get(entry) + 1);

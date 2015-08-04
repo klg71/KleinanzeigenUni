@@ -75,6 +75,10 @@ public class User {
 		return loggedIn;
 	}
 	
+	public boolean containsOffer(Offer offer){
+		return visitedOffers.contains(offer.getId());
+	}
+	
 	public String getFirstName() {
 		return firstName;
 	}
