@@ -130,13 +130,24 @@ public class OfferManager {
 	public HashMap<Integer, Offer> suggestOffers(User user) {
 		ArrayList<Offer> allOffers = new ArrayList<Offer>();
 		ArrayList<Offer> suggestOffers = new ArrayList<Offer>();
+		Offer frequentOffer=null;
+		Integer max=0;
+		Integer current=0;
+		for(Integer i:user.getVisitedOffers()){
+			current=Collections.frequency(user.getVisitedOffers(), i);
+		    if(current>max){
+		    	max=current;
+		    	frequentOffer=getOfferById(i);
+		    }
+		}
+		
 		// Endgültiges Ergebnis
 		HashMap<Integer, Offer> returnMap = new HashMap<Integer, Offer>();
 
 		// Füge besuchten zur Liste hinzu
 		for (Integer offer : user.getVisitedOffers()) {
 			Offer offerByID=getOfferById(offer);
-			if(offer!=null){
+			if(offerByID!=null){
 				allOffers.add(offerByID);
 			}
 		}
@@ -198,6 +209,8 @@ public class OfferManager {
 				}
 			}
 		}
+		if(frequentOffer!=null)
+			returnMap.put(frequentOffer.getId(), frequentOffer);
 		return returnMap;
 	}
 
