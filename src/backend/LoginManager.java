@@ -7,13 +7,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import persistence.DatabaseConnector;
+import persistence.DatabaseConnectorHolder;
 
 public class LoginManager {
 	private DatabaseConnector databaseConnector;
 	private HashMap<String,User> users;
 	
-	public LoginManager(DatabaseConnector databaseConnector){
-		this.databaseConnector=databaseConnector;
+	public LoginManager() throws Exception{
+		this.databaseConnector=DatabaseConnectorHolder.getInstance();
 		try {
 			users=databaseConnector.loadUsers();
 		} catch (FileNotFoundException e) {

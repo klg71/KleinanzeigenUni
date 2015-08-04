@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
+
 import persistence.DatabaseConnector;
+import persistence.DatabaseConnectorHolder;
 import backend.CategoryManager;
 import backend.CommandManager;
 import backend.Crypt;
@@ -31,9 +33,15 @@ public class Run {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		loginManager = new LoginManager(databaseConnector);
-		offerManager = new OfferManager(databaseConnector,loginManager);
-		categoryManager = new CategoryManager(databaseConnector);
+		DatabaseConnectorHolder.initialize(databaseConnector);
+		try {
+			loginManager = new LoginManager();
+			offerManager = new OfferManager(loginManager);
+			categoryManager = new CategoryManager();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		commandManager = new CommandManager(loginManager, offerManager,
 				categoryManager);
 		System.out.println("Uni Kleinanzeigen");

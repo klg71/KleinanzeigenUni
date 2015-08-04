@@ -9,15 +9,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import persistence.DatabaseConnector;
+import persistence.DatabaseConnectorHolder;
 
 public class OfferManager {
 	private HashMap<Integer, Offer> offers;
 	private DatabaseConnector databaseConnector;
 	private LoginManager loginManager;
 
-	public OfferManager(DatabaseConnector databaseConnector, LoginManager loginManager) {
-		this.databaseConnector = databaseConnector;
+	public OfferManager(LoginManager loginManager) throws Exception {
+		this.databaseConnector=DatabaseConnectorHolder.getInstance();
 		this.loginManager = loginManager;
 		try {
 			offers = databaseConnector.loadOffers();
