@@ -22,13 +22,13 @@ public class AddOfferCommand extends Command {
 	@Override
 	public void execute(ArrayList<String> parameters) {
 		String name = "";
-		String description="";
-		Offer offer=null;
-		
+		String description = "";
+		Offer offer = null;
+
 		int category = 0;
 		switch (parameters.size()) {
 		case 0:
-			
+
 			System.out.println("Enter new name:");
 			try {
 				name = br.readLine();
@@ -37,20 +37,20 @@ public class AddOfferCommand extends Command {
 				e.printStackTrace();
 			}
 		case 1:
-			if (parameters.size()==1){
-				name= parameters.get(0);
+			if (parameters.size() == 1) {
+				name = parameters.get(0);
 			}
 			System.out.println("Enter new description:");
 			try {
-				description  = br.readLine();
+				description = br.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		case 2:
-			if (parameters.size()==2){
-				description=parameters.get(1);
-				name= parameters.get(0);
+			if (parameters.size() == 2) {
+				description = parameters.get(1);
+				name = parameters.get(0);
 			}
 			boolean entered = false;
 			while (!entered) {
@@ -58,9 +58,9 @@ public class AddOfferCommand extends Command {
 				System.out.println("Enter the Category:");
 				try {
 					category = Integer.parseInt(br.readLine());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (IOException |NumberFormatException e) {
+					System.out.println("No valid Category");
+					return;
 				}
 				if (categoryManager.getCategories().containsKey(category))
 					entered = true;
@@ -69,22 +69,28 @@ public class AddOfferCommand extends Command {
 				}
 			}
 			break;
-			
+
 		default:
-			if (parameters.size()>2){
-				category=Integer.parseInt(parameters.get(2));
-				description=parameters.get(1);
-				name= parameters.get(0);
+			if (parameters.size() > 2) {
+				try {
+					category = Integer.parseInt(parameters.get(2));
+				} catch (NumberFormatException e) {
+					System.out.println("No valid Category");
+					return;
+				}
+				description = parameters.get(1);
+				name = parameters.get(0);
 			}
-			if (!categoryManager.getCategories().containsKey(category)){
+			if (!categoryManager.getCategories().containsKey(category)) {
 				System.out.println("Please Enter valid Category");
 				return;
 			}
 		}
-		offer=new Offer(name, description, currentUser.getId(), new Date(new java.util.Date().getTime()), 0, category, 1);
+		offer = new Offer(name, description, currentUser.getId(), new Date(new java.util.Date().getTime()), 0, category,
+				1);
 		try {
-			offer=offerManager.addOffer(offer);
-			System.out.println("Added Offer ID: "+offer.getId());
+			offer = offerManager.addOffer(offer);
+			System.out.println("Added Offer ID: " + offer.getId());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

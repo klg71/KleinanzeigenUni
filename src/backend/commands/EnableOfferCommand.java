@@ -21,36 +21,41 @@ public class EnableOfferCommand extends Command {
 	@Override
 	public void execute(ArrayList<String> parameters) {
 		Integer OfferId = 0;
-		switch(parameters.size()){
+		switch (parameters.size()) {
 		case 0:
 			System.out.println("Please enter OfferId:");
 			try {
 				String input = br.readLine();
 				OfferId = Integer.parseInt(input);
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException|NumberFormatException e) {
+				System.out.println("No valid Offer");
+				return;
 			}
 			break;
 		default:
-			OfferId=Integer.parseInt(parameters.get(0));
+			try {
+				OfferId = Integer.parseInt(parameters.get(0));
+			} catch (NumberFormatException e) {
+				System.out.println("No valid Offer");
+				return;
+			}
 		}
-		
+
 		Offer offer = offerManager.getOfferById(OfferId);
 		if (offer == null) {
 			System.out.println("This ID does not exist\n");
 			return;
 		}
-		if(offer.isAvailable()){
+		if (offer.isAvailable()) {
 			System.out.println("Already Enabled!");
 			return;
 		}
-		if(currentUser.getId()!=offer.getUserId()){
+		if (currentUser.getId() != offer.getUserId()) {
 			System.out.println("You cant edit this!");
 			return;
 		}
 		offerManager.enableOffer(offer);
-		System.out.println("Enabled Offer: "+offer.getId());
-		
+		System.out.println("Enabled Offer: " + offer.getId());
 
 	}
 

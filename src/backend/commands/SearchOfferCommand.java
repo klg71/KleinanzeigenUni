@@ -45,9 +45,9 @@ public class SearchOfferCommand extends Command {
 				System.out.println("Enter the Category:");
 				try {
 					category = Integer.parseInt(br.readLine());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (IOException|NumberFormatException e) {
+					System.out.println("No valid Category");
+					return;
 				}
 				if (categoryManager.getCategories().containsKey(category) || category == 0)
 					entered = true;
@@ -58,7 +58,12 @@ public class SearchOfferCommand extends Command {
 			break;
 		default:
 			haystack = parameters.get(0);
+			try {
 			category = Integer.parseInt(parameters.get(1));
+			} catch (NumberFormatException e) {
+				System.out.println("No valid Category");
+				return;
+			}
 		}
 
 		Map<Integer, Offer> results = offerManager.searchOffers(haystack, category);

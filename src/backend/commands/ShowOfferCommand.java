@@ -11,9 +11,7 @@ import backend.OfferManager;
 
 public class ShowOfferCommand extends Command {
 
-	
-	public ShowOfferCommand(LoginManager loginManager, OfferManager offerManager,
-			CategoryManager categoryManager) {
+	public ShowOfferCommand(LoginManager loginManager, OfferManager offerManager, CategoryManager categoryManager) {
 		super(loginManager, offerManager, categoryManager);
 		keywords.add("show");
 		keywords.add("Show");
@@ -23,20 +21,26 @@ public class ShowOfferCommand extends Command {
 	@Override
 	public void execute(ArrayList<String> parameters) {
 		Integer OfferId = 0;
-		switch(parameters.size()){
+		switch (parameters.size()) {
 		case 0:
 			System.out.println("Please enter OfferId:");
 			try {
 				String input = br.readLine();
 				OfferId = Integer.parseInt(input);
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException | NumberFormatException e) {
+				System.out.println("No valid Offer");
+				return;
 			}
 			break;
 		default:
-			OfferId=Integer.parseInt(parameters.get(0));
+			try {
+				OfferId = Integer.parseInt(parameters.get(0));
+			} catch (NumberFormatException e) {
+				System.out.println("No valid Offer");
+				return;
+			}
 		}
-		
+
 		Offer offer = offerManager.getOfferById(OfferId);
 		if (offer == null) {
 			System.out.println("This ID does not exist\n");
@@ -44,7 +48,7 @@ public class ShowOfferCommand extends Command {
 			loginManager.visitOffer(currentUser, offer);
 			printOffer(offer);
 		}
-		
+
 	}
 
 }
