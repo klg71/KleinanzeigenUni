@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import backend.CategoryManager;
 import backend.Command;
+import backend.Crypt;
 import backend.LoginManager;
 import backend.Offer;
 import backend.OfferManager;
@@ -21,150 +22,134 @@ public class EditUserCommand extends Command {
 
 	@Override
 	public void execute(ArrayList<String> parameters) {Integer OfferId=0;
-	String name = "";
-	String description="";
-	Offer offer=null;
-	
-	int category = 0;
+	String firstname = "";
+	String lastname = "";
+	String telefon = "";
+	String address = "";
+	String password = "";
+
 	switch (parameters.size()) {
 	case 0:
-		System.out.println("Enter Offer ID:");
-		try {
-			OfferId= Integer.parseInt(br.readLine());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if(offerManager.getOfferById(OfferId)!=null){
-			offer=offerManager.getOfferById(OfferId);
-			if(offer.getUserId()!=currentUser.getId()){
-				System.out.println("You cant edit this!");
-				return;
-			}
-		}
-		else {
-			System.out.println("No Offer found");
-			return;
-		}
-		
-		
-	case 1:
-		if (parameters.size()==1){
-			OfferId= Integer.parseInt(parameters.get(0));
-		}
-		if(offerManager.getOfferById(OfferId)!=null){
-			offer=offerManager.getOfferById(OfferId);
-			if(offer.getUserId()!=currentUser.getId()){
-				System.out.println("You cant edit this!");
-				return;
-			}
-		}
-		else {
-			System.out.println("No Offer found");
-			return;
-		}
-		
-		System.out.println("Enter new name("+offer.getName()+"):");
-		try {
-			name = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	case 2:
-		if (parameters.size()==2){
-			name= parameters.get(1);
-			OfferId= Integer.parseInt(parameters.get(0));
-		}
-		if(offerManager.getOfferById(OfferId)!=null){
-			offer=offerManager.getOfferById(OfferId);
-			if(offer.getUserId()!=currentUser.getId()){
-				System.out.println("You cant edit this!");
-				return;
-			}
-		}
-		else {
-			System.out.println("No Offer found");
-			return;
-		}
-		
-		System.out.println("Enter new description("+offer.getDescription()+"):");
-		try {
-			description = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	case 3:
-		if (parameters.size()==3){
-			description=parameters.get(2);
-			name= parameters.get(1);
-			OfferId= Integer.parseInt(parameters.get(0));
-		}
-		if(offerManager.getOfferById(OfferId)!=null){
-			offer=offerManager.getOfferById(OfferId);
-			if(offer.getUserId()!=currentUser.getId()){
-				System.out.println("You cant edit this!");
-				return;
-			}
-		}
-		else {
-			System.out.println("No Offer found");
-			return;
-		}
-		
-		boolean entered = false;
-		while (!entered) {
-			printCategories();
-			System.out.println("Enter the Category:");
+		do {
+			System.out.println("Enter new Firstname:("
+					+ currentUser.getFirstName() + ")");
 			try {
-				category = Integer.parseInt(br.readLine());
+				firstname = br.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if (categoryManager.getCategories().containsKey(category))
-				entered = true;
-			else {
-				System.out.println("Please Enter valid Category");
+		} while (firstname.equals(""));
+
+	case 1:
+		if (parameters.size() == 1) {
+			firstname = parameters.get(0);
+		}
+		if (!firstname.equals("")) {
+			System.out.println("Please enter valid information!");
+			return;
+		}
+
+		do {
+			System.out.println("Enter new Lastname("
+					+ currentUser.getLastName() + "):");
+			try {
+				lastname = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+		} while (firstname.equals(""));
+	case 2:
+		if (parameters.size() == 2) {
+			lastname = parameters.get(0);
+			firstname = parameters.get(1);
 		}
+		if (!lastname.equals("") && !firstname.equals("")) {
+			System.out.println("Please enter valid information!");
+			return;
+		}
+
+		do {
+			System.out.println("Enter new address("
+					+ currentUser.getAddress() + "):");
+			try {
+				address = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} while (firstname.equals(""));
+	case 3:
+		if (parameters.size() == 3) {
+			lastname = parameters.get(0);
+			firstname = parameters.get(1);
+			address = parameters.get(2);
+		}
+		if (!lastname.equals("") && !firstname.equals("")
+				&& !address.equals("")) {
+			System.out.println("Please enter valid information!");
+			return;
+		}
+
+		do {
+			System.out.println("Enter new Address("
+					+ currentUser.getAddress() + "):");
+			try {
+				address = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} while (address.equals(""));
+
+	case 4:
+		if (parameters.size() == 3) {
+			lastname = parameters.get(0);
+			firstname = parameters.get(1);
+			address = parameters.get(2);
+			telefon = parameters.get(3);
+		}
+		if (!lastname.equals("") && !firstname.equals("")
+				&& !address.equals("") && !telefon.equals("")) {
+			System.out.println("Please enter valid information!");
+			return;
+		}
+
+		do {
+			System.out.println("Enter new password:");
+			try {
+				password = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} while (password.equals(""));
 		break;
-		
+
 	default:
-		if (parameters.size()>3){
-			category=Integer.parseInt(parameters.get(3));
-			description=parameters.get(2);
-			name= parameters.get(1);
-			OfferId= Integer.parseInt(parameters.get(0));
-		}
-		if(offerManager.getOfferById(OfferId)!=null){
-			offer=offerManager.getOfferById(OfferId);
-			if(offer.getUserId()!=currentUser.getId()){
-				System.out.println("You cant edit this!");
+		if (parameters.size() > 4) {
+			lastname = parameters.get(0);
+			firstname = parameters.get(1);
+			address = parameters.get(2);
+			telefon = parameters.get(3);
+			password = parameters.get(4);
+			if (!lastname.equals("") && !firstname.equals("")
+					&& !address.equals("") && !telefon.equals("")
+					&& !password.equals("")) {
+				System.out.println("Please enter valid information!");
 				return;
 			}
 		}
-		else {
-			System.out.println("No Offer found");
-			return;
-		}
-		if (!categoryManager.getCategories().containsKey(category)){
-			System.out.println("Please Enter valid Category");
-			return;
-		}
-	}
-	if(offer.getUserId()!=currentUser.getId()){
-		System.out.println("You cant edit this!");
-		return;
-	}
-	String oldname=offer.getName();
-	offer.setName(name);
-	offer.setDescription(description);
-	offer.setCategoryID(category);
-	offerManager.editOffer(oldname,offer);
-	System.out.println("Edited Offer: "+offer.getId());
+		currentUser.setAddress(address);
+		currentUser.setFirstName(firstname);
+		currentUser.setLastName(lastname);
+		currentUser.setTelefon(telefon);
+		currentUser.setPasswordHash(Crypt.getSHA1(password));
+		loginManager.editUser(currentUser);
+		System.out.println("Edited User!");
 
+	}
 	}
 
 }

@@ -27,12 +27,18 @@ public class DisableOfferCommand extends Command {
 			try {
 				String input = br.readLine();
 				OfferId = Integer.parseInt(input);
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException|NumberFormatException e) {
+				System.out.println("No valid Offer");
+				return;
 			}
 			break;
 		default:
+			try {
 			OfferId=Integer.parseInt(parameters.get(0));
+			} catch (NumberFormatException e) {
+				System.out.println("No valid Offer");
+				return;
+			}
 		}
 		
 		Offer offer = offerManager.getOfferById(OfferId);
