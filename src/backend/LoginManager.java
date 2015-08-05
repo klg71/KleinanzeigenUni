@@ -88,5 +88,16 @@ public class LoginManager {
 		return users;
 	}
 
+	public void editUser(User currentUser) {
+		try {
+			databaseConnector.editUser(currentUser);
+		} catch (SQLException e) {
+			System.out.println("Database error no user modified!");
+			return;
+		}
+		users.put(currentUser.getUsername(), currentUser);
+		
+	}
+
 	
 }

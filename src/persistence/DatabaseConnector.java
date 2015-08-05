@@ -304,4 +304,23 @@ public class DatabaseConnector {
 		connection.close();
 		return categories;
 	}
+
+	public void editUser(User editedUser) throws SQLException {
+		Connection connection = null;
+		try {
+			Class.forName("org.sqlite.JDBC");
+			connection = DriverManager.getConnection("jdbc:sqlite:" + filename);
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		Statement statement = connection.createStatement();
+		String sql = "update Users set firstname='" + editedUser.getFirstName() + "', lastname='"
+				+ editedUser.getLastName() + "', address=" + editedUser.getAddress()
+				+ ", passwordHash=" + editedUser.getPasswordHash()+ ", telefon=" + editedUser.getTelefon() + " where id=" + editedUser.getId() + ";";
+		statement.execute(sql);
+		
+		connection.close();
+		
+	}
 }

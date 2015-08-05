@@ -20,6 +20,30 @@ public class User {
 	public void setSearches(ArrayList<Search> searches) {
 		this.searches = searches;
 	}
+	
+	public void setPasswordHash(String passwordHash) {
+		this.passwordHash = passwordHash;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public void setTelefon(String telefon) {
+		this.telefon = telefon;
+	}
 
 	public User(String username, String passwordHash, String firstName,
 			String lastName, String address, String telefon, Integer id) {
