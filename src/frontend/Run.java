@@ -55,7 +55,7 @@ public class Run {
 			System.out.println("\nShow All Commands with command: help");
 
 			String command = "";
-			//offerManager.checkOffers();
+			// offerManager.checkOffers();
 			while (!command.equals("exit")) {
 				if (!user.isLoggedIn()) {
 					user = loginUser();
@@ -85,15 +85,17 @@ public class Run {
 
 	public static User loginUser() {
 		User user = null;
-		System.out.println("Please Enter your username:");
-		br = new BufferedReader(new InputStreamReader(System.in));
 		String username = "";
-		try {
-			username = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		do {
+			System.out.println("Please Enter your username:");
+			br = new BufferedReader(new InputStreamReader(System.in));
+			try {
+				username = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} while (username.equals(""));
 		if (loginManager.containsUser(username)) {
 			String password = "";
 			int attempts = 0;
