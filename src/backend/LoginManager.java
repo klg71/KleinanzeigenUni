@@ -7,13 +7,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import persistence.DatabaseConnector;
+import persistence.DatabaseConnectorHolder;
 
 public class LoginManager {
 	private DatabaseConnector databaseConnector;
 	private HashMap<String,User> users;
 	
-	public LoginManager(DatabaseConnector databaseConnector){
-		this.databaseConnector=databaseConnector;
+	public LoginManager() throws Exception{
+		this.databaseConnector=DatabaseConnectorHolder.getInstance();
 		try {
 			users=databaseConnector.loadUsers();
 		} catch (FileNotFoundException e) {
@@ -80,6 +81,22 @@ public class LoginManager {
 	
 	public boolean containsUser(String username){
 		return users.containsKey(username);
+	}
+
+	public HashMap<String, User> getUsers() {
+		// TODO Auto-generated method stub
+		return users;
+	}
+
+	public void editUser(User currentUser) {
+		try {
+			databaseConnector.editUser(currentUser);
+		} catch (SQLException e) {
+			System.out.println("Database error no user modified!");
+			return;
+		}
+		users.put(currentUser.getUsername(), currentUser);
+		
 	}
 
 	

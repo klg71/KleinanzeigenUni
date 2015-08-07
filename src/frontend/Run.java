@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
+
 import persistence.DatabaseConnector;
+import persistence.DatabaseConnectorHolder;
 import backend.CategoryManager;
 import backend.CommandManager;
 import backend.Crypt;
@@ -31,14 +33,20 @@ public class Run {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		loginManager = new LoginManager(databaseConnector);
-		offerManager = new OfferManager(databaseConnector);
-		categoryManager = new CategoryManager(databaseConnector);
-		commandManager = new CommandManager(loginManager,
-				offerManager, categoryManager);
+		DatabaseConnectorHolder.initialize(databaseConnector);
+		try {
+			loginManager = new LoginManager();
+			offerManager = new OfferManager(loginManager);
+			categoryManager = new CategoryManager();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		commandManager = new CommandManager(loginManager, offerManager,
+				categoryManager);
 		System.out.println("Uni Kleinanzeigen");
 		user = loginUser();
-		if(user==null){
+		if (user == null) {
 			return;
 		}
 		if (user.isLoggedIn())
@@ -47,14 +55,15 @@ public class Run {
 			System.out.println("\nShow All Commands with command: help");
 
 			String command = "";
-			offerManager.checkOffers();
+			// offerManager.checkOffers();
 			while (!command.equals("exit")) {
 				if (!user.isLoggedIn()) {
 					user = loginUser();
-					if(user==null){
+					if (user == null) {
 						return;
-					}else {
-						System.out.println("\nShow All Commands with command: help");
+					} else {
+						System.out
+								.println("\nShow All Commands with command: help");
 					}
 				} else {
 					System.out.println("Enter Command:");
@@ -76,15 +85,17 @@ public class Run {
 
 	public static User loginUser() {
 		User user = null;
-		System.out.println("Please Enter your username:");
-		br = new BufferedReader(new InputStreamReader(System.in));
 		String username = "";
-		try {
-			username = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		do {
+			System.out.println("Please Enter your username:");
+			br = new BufferedReader(new InputStreamReader(System.in));
+			try {
+				username = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} while (username.equals(""));
 		if (loginManager.containsUser(username)) {
 			String password = "";
 			int attempts = 0;
@@ -124,46 +135,56 @@ public class Run {
 	}
 
 	public static User registerUser(String username) {
-		System.out.println("User Registration enter your password:");
 		String password = "";
-		try {
-			password = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Enter your firstname:");
+		do {
+			System.out.println("User Registration enter your password:");
+			try {
+				password = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} while (password.equals(""));
 		String firstname = "";
-		try {
-			firstname = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Enter your lastname:");
+		do {
+			System.out.println("Enter your firstname:");
+			try {
+				firstname = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} while (firstname.equals(""));
 		String lastname = "";
-		try {
-			lastname = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Enter your telefon number:");
+		do {
+			System.out.println("Enter your lastname:");
+			try {
+				lastname = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} while (lastname.equals(""));
 		String telefon = "";
-		try {
-			telefon = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Enter your address:");
+		do {
+			System.out.println("Enter your telefon number:");
+			try {
+				telefon = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} while (telefon.equals(""));
 		String address = "";
-		try {
-			address = br.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		do {
+			System.out.println("Enter your address:");
+			try {
+				address = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} while (address.equals(""));
 		User user = null;
 		try {
 			user = loginManager.registerUser(username, password, firstname,

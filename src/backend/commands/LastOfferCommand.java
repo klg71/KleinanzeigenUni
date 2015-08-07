@@ -19,7 +19,9 @@ public class LastOfferCommand extends Command {
 	@Override
 	public void execute(ArrayList<String> parameters) {
 		for (Integer offer : currentUser.getVisitedOffers()) {
-			printSmallOffer(offerManager.getOfferById(offer));
+			if(offer!=null){
+				printSmallOffer(offerManager.getOfferById(offer));
+			}
 		}
 
 	}

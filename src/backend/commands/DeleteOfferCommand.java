@@ -29,10 +29,10 @@ public class DeleteOfferCommand extends Command {
 		case 0:
 			System.out.println("Enter Offer ID:");
 			try {
-				offerId= Integer.parseInt(br.readLine());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				offerId = Integer.parseInt(br.readLine());
+			} catch (IOException | NumberFormatException e) {
+				System.out.println("No valid Offer");
+				return;
 			}
 			if (offerManager.getOfferById(offerId) != null) {
 				offer = offerManager.getOfferById(offerId);
@@ -42,7 +42,12 @@ public class DeleteOfferCommand extends Command {
 			}
 			break;
 		default:
-			offerId= Integer.parseInt(parameters.get(0));
+			try {
+				offerId = Integer.parseInt(parameters.get(0));
+			} catch (NumberFormatException e) {
+				System.out.println("No valid Offer");
+				return;
+			}
 			if (offerManager.getOfferById(offerId) != null) {
 				offer = offerManager.getOfferById(offerId);
 			} else {
@@ -51,12 +56,12 @@ public class DeleteOfferCommand extends Command {
 			}
 
 		}
-		if(offer.getUserId()!=currentUser.getId()){
+		if (offer.getUserId() != currentUser.getId()) {
 			System.out.println("You cant delete this!");
 			return;
 		}
 		offerManager.deleteOffer(offer);
-		System.out.println("Offer: "+offer.getId()+" deleted!");
+		System.out.println("Offer: " + offer.getId() + " deleted!");
 
 	}
 
