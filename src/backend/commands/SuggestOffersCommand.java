@@ -20,11 +20,18 @@ public class SuggestOffersCommand extends Command {
 
 	@Override
 	public void execute(ArrayList<String> parameters) {
+		super.execute(parameters);
 		for (Map.Entry<Integer, Offer> offer : offerManager.suggestOffers(currentUser)
 				.entrySet()) {
 			printSmallOffer(offer.getValue());
 		}
 
+	}
+
+	@Override
+	public void undo() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

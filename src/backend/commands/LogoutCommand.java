@@ -22,9 +22,16 @@ public class LogoutCommand extends Command {
 
 	@Override
 	public void execute(ArrayList<String> parameters) {
+		super.execute(parameters);
 		currentUser.logout();
 		System.out.println("You`re logged out!");
 
+	}
+
+	@Override
+	public void undo() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

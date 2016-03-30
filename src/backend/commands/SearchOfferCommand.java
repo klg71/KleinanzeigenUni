@@ -12,6 +12,7 @@ import backend.OfferManager;
 
 public class SearchOfferCommand extends Command {
 
+	
 	public SearchOfferCommand(LoginManager loginManager, OfferManager offerManager,
 			CategoryManager categoryManager) {
 		super(loginManager, offerManager, categoryManager);
@@ -23,6 +24,7 @@ public class SearchOfferCommand extends Command {
 
 	@Override
 	public void execute(ArrayList<String> parameters) {
+		super.execute(parameters);
 		String haystack = "";
 		int category = 0;
 		switch (parameters.size()) {
@@ -30,6 +32,7 @@ public class SearchOfferCommand extends Command {
 			System.out.println("Offer Search enter the searchstring:");
 			try {
 				haystack = br.readLine();
+				parameters.add(haystack);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -45,6 +48,7 @@ public class SearchOfferCommand extends Command {
 				System.out.println("Enter the Category:");
 				try {
 					category = Integer.parseInt(br.readLine());
+					parameters.add(Integer.toString(category));
 				} catch (IOException|NumberFormatException e) {
 					System.out.println("No valid Category");
 					return;
@@ -76,6 +80,12 @@ public class SearchOfferCommand extends Command {
 
 		loginManager.searchOffers(currentUser, haystack);
 
+	}
+
+	@Override
+	public void undo() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -19,6 +19,7 @@ public class HelpCommand extends Command {
 
 	@Override
 	public void execute(ArrayList<String> parameters) {
+		super.execute(parameters);
 		System.out.println("Available Commands:");
 		System.out.println("help\t Print help");
 		System.out.println("list\t Prints all available Offers");
@@ -34,8 +35,17 @@ public class HelpCommand extends Command {
 				.println("suggest\t Suggests you Offers based on your searched and visited");
 		System.out.println("last\t Lists the Offers you visited last");
 		System.out.println("categories\t Prints all categories");
+		System.out.println("history\t Show command history");
+		System.out.println("edituser\t Edit user preferences");
+		System.out.println("undo\t Undos last command");
 		System.out.println("logout\t User Logout");
 		System.out.println("exit\t Exits the programm");
+	}
+
+	@Override
+	public void undo() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

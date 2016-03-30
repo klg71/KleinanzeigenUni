@@ -11,6 +11,11 @@ import backend.OfferManager;
 
 public class EditOfferCommand extends Command {
 
+	private Offer offer;
+	private String oldName;
+	private String oldDesc;
+	private Integer oldCat;
+	
 	public EditOfferCommand(LoginManager loginManager, OfferManager offerManager, CategoryManager categoryManager) {
 		super(loginManager, offerManager, categoryManager);
 		keywords.add("edit");
@@ -20,10 +25,11 @@ public class EditOfferCommand extends Command {
 
 	@Override
 	public void execute(ArrayList<String> parameters) {
+		super.execute(parameters);
 		Integer OfferId = 0;
 		String name = "";
 		String description = "";
-		Offer offer = null;
+		offer = null;
 
 		int category = 0;
 		switch (parameters.size()) {
@@ -31,6 +37,7 @@ public class EditOfferCommand extends Command {
 			System.out.println("Enter Offer ID:");
 			try {
 				OfferId = Integer.parseInt(br.readLine());
+				parameters.add(Integer.toString(OfferId));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -64,6 +71,7 @@ public class EditOfferCommand extends Command {
 			System.out.println("Enter new name(" + offer.getName() + "):");
 			try {
 				name = br.readLine();
+				parameters.add(name);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -87,6 +95,7 @@ public class EditOfferCommand extends Command {
 			System.out.println("Enter new description(" + offer.getDescription() + "):");
 			try {
 				description = br.readLine();
+				parameters.add(description);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -114,6 +123,7 @@ public class EditOfferCommand extends Command {
 				System.out.println("Enter the Category:");
 				try {
 					category = Integer.parseInt(br.readLine());
+					parameters.add(Integer.toString(category));
 				} catch (IOException | NumberFormatException e) {
 					System.out.println("No valid Category");
 					return;
@@ -162,13 +172,29 @@ public class EditOfferCommand extends Command {
 			System.out.println("You cant edit this!");
 			return;
 		}
-		String oldname = offer.getName();
+		oldName = offer.getName();
+		oldCat = offer.getCategoryID();
+		oldDesc = offer.getDescription();
+		
 		offer.setName(name);
 		offer.setDescription(description);
 		offer.setCategoryID(category);
-		offerManager.editOffer(oldname, offer);
+		offerManager.editOffer(offer);
+		isDone=true;
 		System.out.println("Edited Offer: " + offer.getId());
 
+	}
+
+	@Override
+	public void undo() {
+		if(isDone){
+			offer.setName(oldName);
+			offer.setDescription(oldDesc);
+			offer.setCategoryID(oldCat);
+			offerManager.editOffer(offer);
+			System.out.println("ReEdited Offer: " + offer.getId());
+		}
+		
 	}
 
 }

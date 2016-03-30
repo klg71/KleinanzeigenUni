@@ -14,6 +14,7 @@ import backend.commands.HelpCommand;
 import backend.commands.LastOfferCommand;
 import backend.commands.ListOffersCommand;
 import backend.commands.LogoutCommand;
+import backend.commands.PrintHistoryCommand;
 import backend.commands.SearchOfferCommand;
 import backend.commands.ShowCategoriesCommand;
 import backend.commands.ShowOfferCommand;
@@ -23,6 +24,7 @@ public class CommandManager {
 	private ArrayList<Command> commands;
 	private LoginManager loginManager;
 	private OfferManager offerManager;
+	private Command lastCommand;
 	private CategoryManager categoryManager;
 	public CommandManager(LoginManager loginManager, OfferManager offerManager, CategoryManager categoryManager) {
 		super();
@@ -44,9 +46,14 @@ public class CommandManager {
 		commands.add(new ShowCategoriesCommand(loginManager, offerManager, categoryManager));
 		commands.add(new LogoutCommand(loginManager, offerManager, categoryManager));
 		commands.add(new EditUserCommand(loginManager, offerManager, categoryManager));
+		commands.add(new PrintHistoryCommand(loginManager, offerManager, categoryManager));
 	}
 	public void execute(String input,User currentUser){
-
+		if(input.equals("undo")){
+			History.addCommand(lastCommand,true);
+			lastCommand.undo();
+			return;
+		}
 		ArrayList<String> splitted=new ArrayList<String>();
 		Pattern pattern=Pattern.compile("([A-Za-z0-9]+)|(\\\"[^\"]+\\\")");
 		Matcher m=pattern.matcher(input);
@@ -61,6 +68,8 @@ public class CommandManager {
 			if(command.checkKeyword(keyword)){
 				command.setCurrentUser(currentUser);
 				command.execute(parameters);
+				lastCommand=command;
+				History.addCommand(command,false);
 				return;
 			}
 		}

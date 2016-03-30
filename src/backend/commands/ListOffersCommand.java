@@ -21,6 +21,7 @@ public class ListOffersCommand extends Command {
 
 	@Override
 	public void execute(ArrayList<String> parameters) {
+		super.execute(parameters);
 		for (Map.Entry<Integer, Offer> offer : offerManager.getOffers()
 				.entrySet()) {
 			if(offer!=null){
@@ -31,6 +32,12 @@ public class ListOffersCommand extends Command {
 			System.out.println("No Offers found!");
 		}
 
+	}
+
+	@Override
+	public void undo() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -20,6 +20,7 @@ public class ShowOfferCommand extends Command {
 
 	@Override
 	public void execute(ArrayList<String> parameters) {
+		super.execute(parameters);
 		Integer OfferId = 0;
 		switch (parameters.size()) {
 		case 0:
@@ -27,6 +28,7 @@ public class ShowOfferCommand extends Command {
 			try {
 				String input = br.readLine();
 				OfferId = Integer.parseInt(input);
+				parameters.add(OfferId.toString());
 			} catch (IOException | NumberFormatException e) {
 				System.out.println("No valid Offer");
 				return;
@@ -49,6 +51,12 @@ public class ShowOfferCommand extends Command {
 			printOffer(offer);
 		}
 
+	}
+
+	@Override
+	public void undo() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

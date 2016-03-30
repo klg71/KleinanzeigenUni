@@ -11,6 +11,11 @@ import backend.Offer;
 import backend.OfferManager;
 
 public class EditUserCommand extends Command {
+	private String oldFirstName;
+	private String oldLastName;
+	private String oldTelefon;
+	private String oldAddress;
+	private String oldPass;
 
 	public EditUserCommand(LoginManager loginManager,
 			OfferManager offerManager, CategoryManager categoryManager) {
@@ -22,6 +27,7 @@ public class EditUserCommand extends Command {
 
 	@Override
 	public void execute(ArrayList<String> parameters) {
+		super.execute(parameters);
 		Integer OfferId = 0;
 		String firstname = "";
 		String lastname = "";
@@ -36,6 +42,7 @@ public class EditUserCommand extends Command {
 						+ currentUser.getFirstName() + ")");
 				try {
 					firstname = br.readLine();
+					parameters.add(firstname);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -56,6 +63,7 @@ public class EditUserCommand extends Command {
 						+ currentUser.getLastName() + "):");
 				try {
 					lastname = br.readLine();
+					parameters.add(lastname);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -76,6 +84,7 @@ public class EditUserCommand extends Command {
 						+ currentUser.getAddress() + "):");
 				try {
 					address = br.readLine();
+					parameters.add(address);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -98,6 +107,7 @@ public class EditUserCommand extends Command {
 						+ currentUser.getTelefon() + "):");
 				try {
 					telefon = br.readLine();
+					parameters.add(telefon);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -121,6 +131,7 @@ public class EditUserCommand extends Command {
 				System.out.println("Enter new password:");
 				try {
 					password = br.readLine();
+					parameters.add("****");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -143,14 +154,35 @@ public class EditUserCommand extends Command {
 				}
 			}
 		}
+		oldAddress=currentUser.getAddress();
+		oldFirstName=currentUser.getFirstName();
+		oldLastName=currentUser.getLastName();
+		oldTelefon=currentUser.getTelefon();
+		oldPass=currentUser.getPasswordHash();
+		
 		currentUser.setAddress(address);
 		currentUser.setFirstName(firstname);
 		currentUser.setLastName(lastname);
 		currentUser.setTelefon(telefon);
 		currentUser.setPasswordHash(Crypt.getSHA1(password));
 		loginManager.editUser(currentUser);
+		isDone=true;
 		System.out.println("Edited User!");
 
+	}
+
+	@Override
+	public void undo() {
+		if(isDone){
+			currentUser.setAddress(oldAddress);
+			currentUser.setFirstName(oldFirstName);
+			currentUser.setLastName(oldLastName);
+			currentUser.setTelefon(oldTelefon);
+			currentUser.setPasswordHash(oldPass);
+			loginManager.editUser(currentUser);
+			System.out.println("ReEdited User!");
+		}
+		
 	}
 
 }

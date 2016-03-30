@@ -10,7 +10,8 @@ import backend.Offer;
 import backend.OfferManager;
 
 public class EnableOfferCommand extends Command {
-
+	
+	private Offer offer;
 	public EnableOfferCommand(LoginManager loginManager, OfferManager offerManager, CategoryManager categoryManager) {
 		super(loginManager, offerManager, categoryManager);
 		keywords.add("enable");
@@ -20,6 +21,7 @@ public class EnableOfferCommand extends Command {
 
 	@Override
 	public void execute(ArrayList<String> parameters) {
+		super.execute(parameters);
 		Integer OfferId = 0;
 		switch (parameters.size()) {
 		case 0:
@@ -27,6 +29,7 @@ public class EnableOfferCommand extends Command {
 			try {
 				String input = br.readLine();
 				OfferId = Integer.parseInt(input);
+				parameters.add(OfferId.toString());
 			} catch (IOException|NumberFormatException e) {
 				System.out.println("No valid Offer");
 				return;
@@ -41,7 +44,7 @@ public class EnableOfferCommand extends Command {
 			}
 		}
 
-		Offer offer = offerManager.getOfferById(OfferId);
+		offer = offerManager.getOfferById(OfferId);
 		if (offer == null) {
 			System.out.println("This ID does not exist\n");
 			return;
@@ -55,8 +58,18 @@ public class EnableOfferCommand extends Command {
 			return;
 		}
 		offerManager.enableOffer(offer);
+		isDone=true;
 		System.out.println("Enabled Offer: " + offer.getId());
 
+	}
+
+	@Override
+	public void undo() {
+		if(isDone){
+			offerManager.disableOffer(offer);
+			System.out.println("Disabled Offer: " + offer.getId());
+		}
+		
 	}
 
 }

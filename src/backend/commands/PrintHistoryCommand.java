@@ -4,27 +4,25 @@ import java.util.ArrayList;
 
 import backend.CategoryManager;
 import backend.Command;
+import backend.History;
 import backend.LoginManager;
 import backend.OfferManager;
 
-public class LastOfferCommand extends Command {
+public class PrintHistoryCommand extends Command {
 
-	public LastOfferCommand(LoginManager loginManager, OfferManager offerManager, CategoryManager categoryManager) {
+	public PrintHistoryCommand(LoginManager loginManager, OfferManager offerManager, CategoryManager categoryManager) {
 		super(loginManager, offerManager, categoryManager);
-		keywords.add("last");
-		keywords.add("Last");
-		keywords.add("LAST");
+		keywords.add("history");
+		keywords.add("History");
+		keywords.add("HISTORY");
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void execute(ArrayList<String> parameters) {
+		// TODO Auto-generated method stub
 		super.execute(parameters);
-		for (Integer offer : currentUser.getVisitedOffers()) {
-			if(offer!=null){
-				printSmallOffer(offerManager.getOfferById(offer));
-			}
-		}
-
+		History.printHistory();
 	}
 
 	@Override
@@ -32,5 +30,7 @@ public class LastOfferCommand extends Command {
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 
 }

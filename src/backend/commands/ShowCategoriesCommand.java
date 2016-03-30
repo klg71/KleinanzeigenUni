@@ -21,10 +21,17 @@ public class ShowCategoriesCommand extends Command {
 
 	@Override
 	public void execute(ArrayList<String> parameters) {
+		super.execute(parameters);
 		for(Map.Entry<Integer,Category> category:categoryManager.getCategories().entrySet()){
 			System.out.println(category.getKey()+"\t"+category.getValue().getName());
 		}
 
+	}
+
+	@Override
+	public void undo() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

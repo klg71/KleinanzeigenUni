@@ -11,7 +11,8 @@ import backend.Offer;
 import backend.OfferManager;
 
 public class AddOfferCommand extends Command {
-
+	private Offer offer;
+	
 	public AddOfferCommand(LoginManager loginManager, OfferManager offerManager, CategoryManager categoryManager) {
 		super(loginManager, offerManager, categoryManager);
 		keywords.add("add");
@@ -21,9 +22,10 @@ public class AddOfferCommand extends Command {
 
 	@Override
 	public void execute(ArrayList<String> parameters) {
+		super.execute(parameters);
 		String name = "";
 		String description = "";
-		Offer offer = null;
+		offer = null;
 
 		int category = 0;
 		switch (parameters.size()) {
@@ -32,6 +34,7 @@ public class AddOfferCommand extends Command {
 			System.out.println("Enter new name:");
 			try {
 				name = br.readLine();
+				parameters.add(name);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -43,6 +46,7 @@ public class AddOfferCommand extends Command {
 			System.out.println("Enter new description:");
 			try {
 				description = br.readLine();
+				parameters.add(description);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -58,6 +62,7 @@ public class AddOfferCommand extends Command {
 				System.out.println("Enter the Category:");
 				try {
 					category = Integer.parseInt(br.readLine());
+					parameters.add(Integer.toString(category));
 				} catch (IOException |NumberFormatException e) {
 					System.out.println("No valid Category");
 					return;
@@ -96,6 +101,13 @@ public class AddOfferCommand extends Command {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Override
+	public void undo() {
+		offerManager.deleteOffer(offer);
+		System.out.println("Deleted Offer ID: " + offer.getId());
+		
 	}
 
 }

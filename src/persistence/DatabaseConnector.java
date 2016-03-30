@@ -316,8 +316,8 @@ public class DatabaseConnector {
 		}
 		Statement statement = connection.createStatement();
 		String sql = "update Users set firstname='" + editedUser.getFirstName() + "', lastname='"
-				+ editedUser.getLastName() + "', address=" + editedUser.getAddress()
-				+ ", passwordHash=" + editedUser.getPasswordHash()+ ", telefon=" + editedUser.getTelefon() + " where id=" + editedUser.getId() + ";";
+				+ editedUser.getLastName() + "', address='" + editedUser.getAddress()
+				+ "', passwordHash='" + editedUser.getPasswordHash()+ "', telefon='" + editedUser.getTelefon() + "' where id=" + editedUser.getId() + ";";
 		statement.execute(sql);
 		
 		connection.close();

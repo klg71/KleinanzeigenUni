@@ -109,7 +109,7 @@ public class OfferManager {
 		return null;
 	}
 
-	public void editOffer(String oldname, Offer editedOffer) {
+	public void editOffer(Offer editedOffer) {
 		offers.put(editedOffer.getId(), editedOffer);
 		try {
 			databaseConnector.editOffer(editedOffer);

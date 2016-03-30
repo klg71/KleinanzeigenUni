@@ -92,6 +92,7 @@ public class LoginManager {
 		try {
 			databaseConnector.editUser(currentUser);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out.println("Database error no user modified!");
 			return;
 		}

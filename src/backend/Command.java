@@ -3,16 +3,19 @@ package backend;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 public abstract class Command {
 	protected ArrayList<String> keywords;
+	protected ArrayList<String> parameters;
 	protected int numberParameters;
 	protected LoginManager loginManager;
 	protected OfferManager offerManager;
 	protected CategoryManager categoryManager;
 	protected User currentUser;
 	protected BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	protected boolean isDone;
 	
 	
 	public Command(LoginManager loginManager,OfferManager offerManager,CategoryManager categoryManager){
@@ -23,11 +26,24 @@ public abstract class Command {
 		keywords=new ArrayList<String>();
 	}
 	
+	public ArrayList<String> getKeywords() {
+		return keywords;
+	}
+
+	public ArrayList<String> getParameters() {
+		return parameters;
+	}
+
 	public void setCurrentUser(User currentUser) {
 		this.currentUser = currentUser;
 	}
 
-	public abstract void execute(ArrayList<String> parameters);
+	public void execute(ArrayList<String> parameters){
+		this.parameters=parameters;
+		isDone=false;
+	}
+	public abstract void undo();
+
 	public boolean checkKeyword(String keyword){
 		return keywords.contains(keyword);
 	}
